@@ -21,6 +21,7 @@ public class MerchantController {
         this.merchantService = merchantService;
     }
 
+    //register API
     @PostMapping("/register")
     public ResponseEntity<MerchantResponse> registerMerchant(
             @RequestBody MerchantRegisterRequest request) {
