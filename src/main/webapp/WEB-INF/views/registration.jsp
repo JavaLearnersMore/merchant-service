@@ -344,6 +344,75 @@ button:hover {
     min-height: 0;
 }
 
+/* =========================
+   CREATE ORDER
+========================= */
+
+.order-response {
+    margin-top: 20px;
+    padding: 16px;
+    background: #f0fff4;
+    border: 1px solid #28a745;
+    border-radius: 6px;
+    color: #155724;
+    font-size: 14px;
+}
+
+.order-response h3 {
+    margin: 0 0 12px;
+    color: #218838;
+    font-size: 18px;
+}
+
+.order-response p {
+    margin: 7px 0;
+}
+
+.order-error {
+    margin-top: 20px;
+    padding: 16px;
+    background: #fff5f5;
+    border: 1px solid #dc3545;
+    border-radius: 6px;
+    color: #dc3545;
+    font-size: 14px;
+}
+
+.order-error h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+}
+
+.create-order-row {
+    display: grid;
+    grid-template-columns: 58% 1fr;
+    gap: 28px;
+    align-items: start;
+}
+
+.order-box {
+    width: 100%;
+    min-height: 0;
+    padding: 32px;
+}
+
+
+.checkout-link {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.checkout-link:hover {
+    background: #218838;
+}
+
+
 
 /* =========================
    MOBILE
@@ -1031,14 +1100,203 @@ button:hover {
 </div>
 
 
+<!-- =====================================================
+     ROW 3
+===================================================== -->
+
+<div class="row">
+
+
+<!-- =====================================================
+     5. CREATE ORDER
+===================================================== -->
+
+<div class="box order-box">
+
+
+
+    <h2>
+        Create Order
+    </h2>
+
+    <div class="subtitle">
+        Create a new merchant order
+    </div>
+
+
+    <form
+    action="${pageContext.request.contextPath}/merchant/create-order"
+    method="post">
+    
+
+
+        <!-- ORDER REFERENCE -->
+
+        <div class="form-row">
+
+            <label>
+                Order Reference *
+            </label>
+
+            <input
+                type="text"
+                id="orderRef"
+                name="orderRef"
+                placeholder="ORD-2026-000123"
+                required>
+
+        </div>
+
+
+        <!-- AMOUNT -->
+
+        <div class="form-row">
+
+            <label>
+                Amount *
+            </label>
+
+            <input
+                type="number"
+                id="amount"
+                name="amount"
+                placeholder="1499.00"
+                step="0.01"
+                min="0.01"
+                required>
+
+        </div>
+
+
+        <!-- CURRENCY -->
+
+        <div class="form-row">
+
+            <label>
+                Currency *
+            </label>
+
+            <select
+                id="currency"
+                name="currency"
+                required>
+
+                <option value="INR">
+                    INR
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- CUSTOMER EMAIL -->
+
+        <div class="form-row">
+
+            <label>
+                Customer Email *
+            </label>
+
+            <input
+                type="email"
+                id="customerEmail"
+                name="customerEmail"
+                placeholder="customer@example.com"
+                required>
+
+        </div>
+
+
+        <!-- CREATE ORDER BUTTON -->
+
+        <button
+            type="submit"
+            id="createOrderButton">
+
+            Create Order
+
+        </button>
+
+
+    </form>
+
+
+    <!-- =================================================
+         CREATE ORDER RESPONSE
+    ================================================= -->
+
+    <% if (request.getAttribute("orderResponse") != null) { %>
+
+<div id="orderResponse" class="response">
+
+    <h3>
+        Order Created Successfully
+    </h3>
+
+    <p>
+        <b>Order Reference:</b>
+        ${orderResponse.orderRef}
+    </p>
+
+    <p>
+        <b>Merchant ID:</b>
+        ${orderResponse.merchantId}
+    </p>
+
+    <p>
+        <b>Amount:</b>
+        ${orderResponse.amount}
+    </p>
+
+    <p>
+        <b>Currency:</b>
+        ${orderResponse.currency}
+    </p>
+
+    <p>
+        <b>Status:</b>
+        ${orderResponse.status}
+    </p>
+
+    <p>
+        <b>PG Transaction Reference:</b>
+        ${orderResponse.pgTxnRef}
+    </p>
+
+    <p>
+        <b>Checkout URL:</b>
+         ${orderResponse.checkoutUrl}
+      </p>   
+
+<!--         <a -->
+<!--             class="checkout-link" -->
+<%--             href="${pageContext.request.contextPath}${orderResponse.checkoutUrl}"> --%>
+<!--             Open Checkout -->
+<!--         </a> -->
+
+    
+
+    <p>
+        <b>Created At:</b>
+        ${orderResponse.createdAt}
+    </p>
+
+    <p>
+        <b>Updated At:</b>
+        ${orderResponse.updatedAt}
+    </p>
+
 </div>
 
-
+<% } %>
+</div>    
 </div>
 
-
+</div>
 </div>
 
+</div>
 
 </body>
 

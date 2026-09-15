@@ -33,7 +33,10 @@ public class SecurityConfig {
                 "/api/v1/admin/merchants/ui-approve",
                 
                 "/api/v1/merchants/register",
-                "/api/v1/merchants/ui-register"
+                "/api/v1/merchants/ui-register",
+                
+                "/api/v1/orders",
+                "/merchant/create-order"
             ).permitAll()
             .anyRequest().authenticated();
 
