@@ -1,6 +1,8 @@
 <%@ page language="java"
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+    <%@ page import="java.util.List" %>
 
 <!DOCTYPE html>
 <html>
@@ -63,9 +65,6 @@ body {
     align-items: start;
 }
 
-
-/* Space between rows */
-
 .row + .row {
     margin-top: 28px;
 }
@@ -90,11 +89,8 @@ body {
 
 h2 {
     margin: 0 0 10px;
-
     color: #172033;
-
     font-size: 30px;
-
     line-height: 1.2;
 }
 
@@ -105,9 +101,7 @@ h2 {
 
 .subtitle {
     color: #666;
-
     font-size: 16px;
-
     margin-bottom: 20px;
 }
 
@@ -127,13 +121,9 @@ h2 {
 
 label {
     display: block;
-
     font-weight: bold;
-
     font-size: 16px;
-
     margin-bottom: 6px;
-
     color: #111;
 }
 
@@ -144,28 +134,18 @@ label {
 
 input {
     width: 100%;
-
     height: 48px;
-
     padding: 10px 12px;
-
     border: 1px solid #ccc;
-
     border-radius: 6px;
-
     font-size: 16px;
-
     outline: none;
-
     background: #fff;
 }
 
-
 input:focus {
     border-color: #1976d2;
-
-    box-shadow:
-        0 0 0 2px rgba(25, 118, 210, 0.12);
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.12);
 }
 
 
@@ -175,22 +155,14 @@ input:focus {
 
 select {
     width: 100%;
-
     height: 48px;
-
     padding: 10px 12px;
-
     border: 1px solid #ccc;
-
     border-radius: 6px;
-
     font-size: 16px;
-
     background: #fff;
-
     outline: none;
 }
-
 
 select:focus {
     border-color: #1976d2;
@@ -203,26 +175,16 @@ select:focus {
 
 button {
     width: 100%;
-
     height: 50px;
-
     margin-top: 6px;
-
     background: #1976d2;
-
     color: white;
-
     border: none;
-
     border-radius: 6px;
-
     font-size: 16px;
-
     font-weight: bold;
-
     cursor: pointer;
 }
-
 
 button:hover {
     background: #125aa0;
@@ -235,27 +197,18 @@ button:hover {
 
 .response {
     margin-top: 18px;
-
     padding: 14px;
-
     background: #f0fff4;
-
     border: 1px solid #28a745;
-
     border-radius: 6px;
-
     font-size: 14px;
 }
 
-
 .response h3 {
     margin: 0 0 10px;
-
     color: #218838;
-
     font-size: 18px;
 }
-
 
 .response p {
     margin: 6px 0;
@@ -268,34 +221,24 @@ button:hover {
 
 .login-response {
     margin-top: 18px;
-
     padding: 14px;
-
     background: #f0fff4;
-
     border: 1px solid #28a745;
-
     border-radius: 6px;
-
     color: #218838;
-
     font-size: 14px;
-
     word-break: break-word;
 }
 
-
 .login-response h3 {
     margin: 0 0 10px;
-
     font-size: 18px;
 }
 
 .login-box {
     min-height: 380px;
-`    padding: 32px;
+    padding: 32px;
 }
-
 
 .login-box input {
     height: 48px;
@@ -307,31 +250,22 @@ button:hover {
 }
 
 
-
 /* =========================
    ERROR RESPONSE
 ========================= */
 
 .error-response {
     margin-top: 18px;
-
     padding: 14px;
-
     background: #fff5f5;
-
     border: 1px solid #dc3545;
-
     border-radius: 6px;
-
     color: #dc3545;
-
     font-size: 14px;
 }
 
-
 .error-response h3 {
     margin: 0 0 10px;
-
     font-size: 18px;
 }
 
@@ -344,8 +278,18 @@ button:hover {
     min-height: 0;
 }
 
+
 /* =========================
    CREATE ORDER
+========================= */
+
+.order-box {
+    min-height: 0;
+}
+
+
+/* =========================
+   ORDER RESPONSE
 ========================= */
 
 .order-response {
@@ -368,6 +312,11 @@ button:hover {
     margin: 7px 0;
 }
 
+
+/* =========================
+   ORDER ERROR
+========================= */
+
 .order-error {
     margin-top: 20px;
     padding: 16px;
@@ -383,19 +332,10 @@ button:hover {
     font-size: 18px;
 }
 
-.create-order-row {
-    display: grid;
-    grid-template-columns: 58% 1fr;
-    gap: 28px;
-    align-items: start;
-}
 
-.order-box {
-    width: 100%;
-    min-height: 0;
-    padding: 32px;
-}
-
+/* =========================
+   CHECKOUT LINK
+========================= */
 
 .checkout-link {
     display: inline-block;
@@ -412,6 +352,22 @@ button:hover {
     background: #218838;
 }
 
+.single-order {
+    margin-top: 15px;
+    padding: 15px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+.single-order p {
+    margin: 7px 0;
+    word-break: break-word;
+}
+
+.single-order + .single-order {
+    margin-top: 15px;
+}
 
 
 /* =========================
@@ -442,7 +398,6 @@ button:hover {
 
 }
 
-
 </style>
 
 </head>
@@ -450,9 +405,7 @@ button:hover {
 
 <body>
 
-
 <div class="page">
-
 
 <div class="main">
 
@@ -478,11 +431,9 @@ button:hover {
         Create merchant and its first ADMIN portal user
     </div>
 
-
     <form
         action="${pageContext.request.contextPath}/api/v1/merchants/ui-register"
         method="post">
-
 
         <!-- LEGAL NAME -->
 
@@ -699,11 +650,9 @@ button:hover {
         Login to Merchant Portal
     </div>
 
-
     <form
         action="${pageContext.request.contextPath}/login"
         method="post">
-
 
         <!-- USERNAME -->
 
@@ -814,11 +763,9 @@ button:hover {
         Platform Admin - Update Merchant KYC
     </div>
 
-
     <form
         action="${pageContext.request.contextPath}/api/v1/admin/merchants/ui-kyc"
         method="post">
-
 
         <!-- MERCHANT ID -->
 
@@ -963,11 +910,9 @@ button:hover {
         Platform Admin - Approve Status
     </div>
 
-
     <form
         action="${pageContext.request.contextPath}/api/v1/admin/merchants/ui-approve"
         method="post">
-
 
         <!-- MERCHANT ID -->
 
@@ -998,7 +943,9 @@ button:hover {
                 name="status"
                 required>
 
-                <option value="ACTIVE">
+                <!-- ACTIVE REMAINS DEFAULT -->
+
+                <option value="ACTIVE" selected>
                     ACTIVE
                 </option>
 
@@ -1020,9 +967,7 @@ button:hover {
     </form>
 
 
-    <!-- =================================================
-         APPROVE RESPONSE
-    ================================================= -->
+    <!-- APPROVE RESPONSE -->
 
     <% if (request.getAttribute("approveResponse") != null) { %>
 
@@ -1077,9 +1022,7 @@ button:hover {
     <% } %>
 
 
-    <!-- =================================================
-         APPROVE ERROR
-    ================================================= -->
+    <!-- APPROVE ERROR -->
 
     <% if (request.getAttribute("approveError") != null) { %>
 
@@ -1099,6 +1042,12 @@ button:hover {
 
 </div>
 
+</div>
+<!-- =====================================================
+     IMPORTANT:
+     ROW 2 ENDS HERE
+===================================================== -->
+
 
 <!-- =====================================================
      ROW 3
@@ -1113,8 +1062,6 @@ button:hover {
 
 <div class="box order-box">
 
-
-
     <h2>
         Create Order
     </h2>
@@ -1125,9 +1072,8 @@ button:hover {
 
 
     <form
-    action="${pageContext.request.contextPath}/merchant/create-order"
-    method="post">
-    
+        action="${pageContext.request.contextPath}/merchant/create-order"
+        method="post">
 
 
         <!-- ORDER REFERENCE -->
@@ -1218,7 +1164,6 @@ button:hover {
 
         </button>
 
-
     </form>
 
 
@@ -1228,75 +1173,214 @@ button:hover {
 
     <% if (request.getAttribute("orderResponse") != null) { %>
 
-<div id="orderResponse" class="response">
+    <div id="orderResponse" class="response">
 
-    <h3>
-        Order Created Successfully
-    </h3>
+        <h3>
+            Order Created Successfully
+        </h3>
 
-    <p>
-        <b>Order Reference:</b>
-        ${orderResponse.orderRef}
-    </p>
+        <p>
+            <b>Order Reference:</b>
+            ${orderResponse.orderRef}
+        </p>
 
-    <p>
-        <b>Merchant ID:</b>
-        ${orderResponse.merchantId}
-    </p>
+        <p>
+            <b>Merchant ID:</b>
+            ${orderResponse.merchantId}
+        </p>
 
-    <p>
-        <b>Amount:</b>
-        ${orderResponse.amount}
-    </p>
+        <p>
+            <b>Amount:</b>
+            ${orderResponse.amount}
+        </p>
 
-    <p>
-        <b>Currency:</b>
-        ${orderResponse.currency}
-    </p>
+        <p>
+            <b>Currency:</b>
+            ${orderResponse.currency}
+        </p>
 
-    <p>
-        <b>Status:</b>
-        ${orderResponse.status}
-    </p>
+        <p>
+            <b>Status:</b>
+            ${orderResponse.status}
+        </p>
 
-    <p>
-        <b>PG Transaction Reference:</b>
-        ${orderResponse.pgTxnRef}
-    </p>
+        <p>
+            <b>PG Transaction Reference:</b>
+            ${orderResponse.pgTxnRef}
+        </p>
 
-    <p>
-        <b>Checkout URL:</b>
-         ${orderResponse.checkoutUrl}
-      </p>   
+        <p>
+            <b>Checkout URL:</b>
+            ${orderResponse.checkoutUrl}
+        </p>
 
-<!--         <a -->
-<!--             class="checkout-link" -->
-<%--             href="${pageContext.request.contextPath}${orderResponse.checkoutUrl}"> --%>
-<!--             Open Checkout -->
-<!--         </a> -->
+        <p>
+            <b>Created At:</b>
+            ${orderResponse.createdAt}
+        </p>
 
+        <p>
+            <b>Updated At:</b>
+            ${orderResponse.updatedAt}
+        </p>
+
+    </div>
+
+    <% } %>
+
+
+    <!-- =================================================
+         CREATE ORDER ERROR
+    ================================================= -->
+
+    <% if (request.getAttribute("orderError") != null) { %>
+
+    <div class="order-error">
+
+        <h3>
+            Order Creation Failed
+        </h3>
+
+        <p>
+            ${orderError}
+        </p>
+
+    </div>
+
+    <% } %>
+
+</div>
+
+
+<!-- =====================================================
+     ROW 3 ENDS HERE
+===================================================== -->
     
+    <!-- =================================================
+         6. MY ORDERS
+    ================================================= -->
 
-    <p>
-        <b>Created At:</b>
-        ${orderResponse.createdAt}
-    </p>
+    <div class="box order-box">
 
-    <p>
-        <b>Updated At:</b>
-        ${orderResponse.updatedAt}
-    </p>
+        <h2>
+            My Orders
+        </h2>
+
+        <div class="subtitle">
+            View all orders belonging to this merchant
+        </div>
+
+
+        <!-- LIST ORDERS BUTTON -->
+
+        <form
+            action="${pageContext.request.contextPath}/merchant/my-orders"
+            method="get">
+
+            <button type="submit">
+                List Of My Orders
+            </button>
+
+        </form>
+
+
+        <!-- =================================================
+             ORDERS RESPONSE
+        ================================================= -->
+
+        <% if (request.getAttribute("order") != null) { %>
+
+            <div class="order-response">
+
+                <h3>
+                    My Orders
+                </h3>
+
+                <%
+                    List<com.example.model.Merchant_Order> orders =
+                        (List<com.example.model.Merchant_Order>)
+                        request.getAttribute("order");
+                %>
+
+
+                <% if (orders.isEmpty()) { %>
+
+                    <p>
+                        No orders found for this merchant.
+                    </p>
+
+                <% } else { %>
+
+
+                    <% for (com.example.model.Merchant_Order order : orders) { %>
+
+                        <div class="single-order">
+
+                            <p>
+                                <b>Order Reference:</b>
+                                <%= order.getOrder_ref() %>
+                            </p>
+
+                            <p>
+                                <b>Merchant ID:</b>
+                                <%= order.getMerchant_id() %>
+                            </p>
+
+                            <p>
+                                <b>Amount:</b>
+                                <%= order.getAmount() %>
+                            </p>
+
+                            <p>
+                                <b>Currency:</b>
+                                <%= order.getCurrency() %>
+                            </p>
+
+                            <p>
+                                <b>Status:</b>
+                                <%= order.getStatus() %>
+                            </p>
+
+                            <p>
+                                <b>PG Transaction Reference:</b>
+                                <%= order.getPg_txn_ref() %>
+                            </p>
+
+                            <p>
+                                <b>Checkout URL:</b>
+                                /pg/api/v1/authenticate/<%= order.getPg_txn_ref() %>
+                            </p>
+
+                            <p>
+                                <b>Created At:</b>
+                                <%= order.getCreated_at() %>
+                            </p>
+
+                            <p>
+                                <b>Updated At:</b>
+                                <%= order.getUpdated_at() %>
+                            </p>
+
+                        </div>
+
+                    <% } %>
+
+                <% } %>
+
+            </div>
+
+        <% } %>
+
+    </div>
 
 </div>
+    
+</div>
+</div>
+<!-- MAIN ENDS -->
 
-<% } %>
-</div>    
-</div>
 
-</div>
-</div>
-
-</div>
+<!-- PAGE ENDS -->
 
 </body>
 

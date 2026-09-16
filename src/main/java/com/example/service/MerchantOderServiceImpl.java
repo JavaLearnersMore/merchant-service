@@ -1,6 +1,7 @@
 package com.example.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -80,6 +81,15 @@ public class MerchantOderServiceImpl implements MerchantOderService{
 		
 		
 	}
+	
+	
+	@Override
+    public List<Merchant_Order> getMyOrders(
+            long merchant_id) {
+
+        return merchantOrderDao
+                .getMerchantOrderByMerchantId(merchant_id);
+    }
 	
 	
 	

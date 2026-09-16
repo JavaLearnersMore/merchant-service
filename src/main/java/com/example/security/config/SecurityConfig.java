@@ -36,7 +36,9 @@ public class SecurityConfig {
                 "/api/v1/merchants/ui-register",
                 
                 "/api/v1/orders",
-                "/merchant/create-order"
+                "/merchant/create-order",
+                
+                "/merchant/my-orders"
             ).permitAll()
             .anyRequest().authenticated();
 
