@@ -7,4 +7,6 @@ public interface AuthService {
 
 	LoginResponse login(LoginRequest request);
 
+	LoginResponse merchantLogin(LoginRequest request);
+
 }

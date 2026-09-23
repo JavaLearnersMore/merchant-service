@@ -11,6 +11,7 @@ public class MerchantRegisterRequest {
 
 	    private String adminUsername;
 	    private String adminPassword;
+	    private String role;
 
 	    public String getLegalName() {
 	        return legalName;
@@ -76,4 +77,12 @@ public class MerchantRegisterRequest {
 	        this.adminPassword = adminPassword;
 	    }
 
+	    
+	    public String getRole() {
+	        return role;
+	    }
+
+	    public void setRole(String role) {
+	        this.role = role;
+	    }
 }

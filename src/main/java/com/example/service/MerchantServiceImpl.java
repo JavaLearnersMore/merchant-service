@@ -49,7 +49,9 @@ public class MerchantServiceImpl implements MerchantService {
 
         // NEVER store plain password
         user.setPasswordHash( passwordEncoder.encode( request.getAdminPassword()));
-        user.setRole("ADMIN");
+        //user.setRole("ADMIN");
+        user.setRole(request.getRole());
+        
         user.setActive(true);
 
         // 4. Save ADMIN user

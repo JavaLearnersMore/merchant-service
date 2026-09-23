@@ -13,6 +13,36 @@
 
 <title>Merchant Portal</title>
 
+
+<script>
+
+function validateMerchantLogin() {
+
+    <% if (session.getAttribute("merchantLoginResponse") == null) { %>
+
+        alert("Please first login as merchant.");
+        return false;
+
+    <% } %>
+
+    return true;
+}
+
+
+function validateAdminLogin() {
+
+    <% if (session.getAttribute("loginResponse") == null) { %>
+
+        alert("Please first login as platform admin.");
+        return false;
+
+    <% } %>
+
+    return true;
+}
+
+</script>
+
 <style>
 
 /* =========================
@@ -616,6 +646,15 @@ button:hover {
         </div>
 
 
+         <div class="form-group">
+              <label for="role">Role</label>
+                 <select id="role" name="role" required>
+                   <option value="">Select Role</option>
+                   <option value="ADMIN">ADMIN</option>
+                   <option value="MERCHANT">MERCHANT</option>
+                </select>
+        </div>
+
         <!-- REGISTER BUTTON -->
 
         <button type="submit">
@@ -853,7 +892,7 @@ button:hover {
   
                 </form>  
   
-                <% if (request.getAttribute("loginResponse") != null) { %>  
+                <% if (request.getAttribute("merchantLoginResponse") != null) { %>  
   
                     <div class="login-response">  
   
@@ -863,28 +902,28 @@ button:hover {
   
                         <p>  
                             <b>Access Token:</b>  
-                            ${loginResponse.accessToken}  
+                            ${merchantLoginResponse.accessToken}  
                         </p>  
   
                         <p>  
                             <b>Token Type:</b>  
-                            ${loginResponse.tokenType}  
+                            ${merchantLoginResponse.tokenType}  
                         </p>  
   
                         <p>  
                             <b>Expires In:</b>  
-                            ${loginResponse.expiresInSeconds}  
+                            ${merchantLoginResponse.expiresInSeconds}  
                             seconds  
                         </p>  
   
                         <p>  
                             <b>Merchant ID:</b>  
-                            ${loginResponse.merchantId}  
+                            ${merchantLoginResponse.merchantId}  
                         </p>  
   
                         <p>  
                             <b>Role:</b>  
-                            ${loginResponse.role}  
+                            ${merchantLoginResponse.role}  
                         </p>  
   
                     </div>  
@@ -1005,7 +1044,7 @@ button:hover {
 
         <!-- UPDATE BUTTON -->
 
-        <button type="submit">
+        <button type="submit" onclick="return validateAdminLogin();">
             Update KYC
         </button>
 
@@ -1133,7 +1172,7 @@ button:hover {
 
         <!-- APPROVE BUTTON -->
 
-        <button type="submit">
+        <button type="submit" onclick="return validateAdminLogin();">
             Approve Merchant
         </button>
 
@@ -1331,7 +1370,8 @@ button:hover {
 
         <button
             type="submit"
-            id="createOrderButton">
+            id="createOrderButton"
+            onclick="return validateMerchantLogin();">
 
             Create Order
 
@@ -1452,7 +1492,7 @@ button:hover {
             action="${pageContext.request.contextPath}/merchant/my-orders"
             method="get">
 
-            <button type="submit">
+            <button type="submit" onclick="return validateMerchantLogin();">
                 List Of My Orders
             </button>
 
@@ -1591,7 +1631,7 @@ button:hover {
 
         </div>
 
-        <button type="submit">
+        <button type="submit" onclick="return validateMerchantLogin();">
             Get Order
         </button>
 

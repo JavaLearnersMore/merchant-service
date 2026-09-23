@@ -87,6 +87,46 @@ public class AuthServiceImpl implements AuthService{
                 user.getRole()
         );
     }
+    
+    
+    
+ // =====================================================
+    // MERCHANT LOGIN
+    // =====================================================
 
+    @Override
+    public LoginResponse merchantLogin(LoginRequest request) {
+
+        // 1. Find merchant user
+        MerchantUser user = merchantDao.findUserByUsername(request.getUsername());
+
+        // 2. Check password
+        boolean passwordMatches =passwordEncoder.matches(
+        		request.getPassword(),user.getPasswordHash());
+
+        if (!passwordMatches) {
+            throw new RuntimeException("Invalid username or password");
+        }
+
+        // 3. Check merchant user active
+        if (!user.isActive()) {
+            throw new RuntimeException("Merchant user is inactive");
+        }
+
+        // 4. Get merchant
+        Merchant merchant =merchantDao.findById(user.getMerchantId());
+        
+        // We are explicitly passing MERCHANT as role.
+        String accessToken =jwtService.generateToken(user.getMerchantId(), user.getUsername(),"MERCHANT");
+
+        // 6. Return merchant response
+        return new LoginResponse(
+                accessToken,
+                "Bearer",
+                3600,
+                user.getMerchantId(),
+                "MERCHANT"
+        );
+    }
 	
 }

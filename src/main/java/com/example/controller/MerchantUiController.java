@@ -30,6 +30,7 @@ public class MerchantUiController {
             @RequestParam String settlementAccountId,
             @RequestParam String adminUsername,
             @RequestParam String adminPassword,
+            @RequestParam String role,
             Model model) {
 
         MerchantRegisterRequest request =new MerchantRegisterRequest();
@@ -41,6 +42,10 @@ public class MerchantUiController {
         request.setSettlementAccountId(settlementAccountId);
         request.setAdminUsername(adminUsername);
         request.setAdminPassword(adminPassword);
+        request.setRole(role);
+        
+        System.out.println("Selected Role = " + role);
+        System.out.println("Request Role = " + request.getRole());
 
         // Register merchant
         MerchantResponse response =merchantService.registerMerchant(request);
