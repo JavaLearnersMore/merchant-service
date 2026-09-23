@@ -62,7 +62,6 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 28px;
-    align-items: start;
 }
 
 .row + .row {
@@ -332,6 +331,35 @@ button:hover {
     font-size: 18px;
 }
 
+/* =========================
+   MY ORDERS SCROLL
+========================= */
+
+.orders-list {
+    max-height: 450px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 8px;
+}
+
+.orders-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.orders-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.orders-list::-webkit-scrollbar-thumb {
+    background: #999;
+    border-radius: 10px;
+}
+
+.orders-list::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
 
 /* =========================
    CHECKOUT LINK
@@ -368,6 +396,29 @@ button:hover {
 .single-order + .single-order {
     margin-top: 15px;
 }
+
+/* =========================
+   SINGLE ORDER 404 ERROR
+========================= */
+
+.single-order-error {
+    margin-top: 20px;
+    padding: 16px;
+    background: #fff5f5;
+    border: 1px solid #dc3545;
+    border-radius: 6px;
+    color: #dc3545;
+    font-size: 14px;
+}
+
+.single-order-error pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: Consolas, "Courier New", monospace;
+    line-height: 1.6;
+}
+
 
 
 /* =========================
@@ -636,110 +687,232 @@ button:hover {
 </div>
 
 
-<!-- =====================================================
-     2. PLATFORM ADMIN LOGIN
-===================================================== -->
 
-<div class="box login-box">
+        <!-- ===================================================== 
+             RIGHT COLUMN 
+        ====================================================== --> 
 
-    <h2>
-        Platform Admin Login
-    </h2>
+        <div>
 
-    <div class="subtitle">
-        Login to Merchant Portal
-    </div>
 
-    <form
-        action="${pageContext.request.contextPath}/login"
-        method="post">
+            <!-- =================================================  
+                 PLATFORM ADMIN LOGIN 
+            ================================================== -->  
+  
+            <div class="box login-box">  
+  
+                <h2>  
+                    Platform Admin Login  
+                </h2>  
+  
+                <div class="subtitle">  
+                    Login as Platform Administrator  
+                </div>  
+  
+                <form  
+                    action="${pageContext.request.contextPath}/login"  
+                    method="post">  
+  
+                    <div class="form-row">  
+  
+                        <label>  
+                            Username  
+                        </label>  
+  
+                        <input  
+                            type="text"  
+                            name="username"  
+                            placeholder="Admin Username"  
+                            required>  
+  
+                    </div>  
+  
+                    <div class="form-row">  
+  
+                        <label>  
+                            Password  
+                        </label>  
+  
+                        <input  
+                            type="password"  
+                            name="password"  
+                            placeholder="Admin Password"  
+                            required>  
+  
+                    </div>  
+  
+                    <button type="submit">  
+                        Admin Login  
+                    </button>  
+  
+                </form>  
+  
+                <% if (request.getAttribute("loginResponse") != null) { %>  
+  
+                    <div class="login-response">  
+  
+                         <h3>Login Successful</h3>
 
-        <!-- USERNAME -->
+                        <p>
+                           <b>Access Token:</b>
+                             ${loginResponse.accessToken}
+                        </p>
 
-        <div class="form-row">
+                        <p>
+                           <b>Token Type:</b>
+                           ${loginResponse.tokenType}
+                        </p>
 
-            <label>
-                Username
-            </label>
+                        <p>
+                           <b>Expires In:</b>
+                           ${loginResponse.expiresInSeconds} seconds
+                       </p>
 
-            <input
-                type="text"
-                name="username"
-                placeholder="Username"
-                required>
+                       <p>
+                           <b>Merchant ID:</b>
+                           ${loginResponse.merchantId}
+                       </p>
+
+                          <p>
+                           <b>Role:</b>
+                            ${loginResponse.role}
+                       </p> 
+  
+                    </div>  
+  
+                <% } %>  
+  
+                <% if (request.getAttribute("loginError") != null) { %>  
+  
+                    <div class="error-response">  
+  
+                        <h3>  
+                            Login Failed  
+                        </h3>  
+  
+                        <p>  
+                            ${loginError}  
+                        </p>  
+  
+                    </div>  
+  
+                <% } %>  
+  
+            </div>  
+  
+  
+            <!-- =================================================  
+                 MERCHANT LOGIN - ONLY ADDITION
+            ================================================== -->  
+  
+            <div class="box login-box">  
+  
+                <h2>  
+                    Merchant Login  
+                </h2>  
+  
+                <div class="subtitle">  
+                    Login to Merchant Portal  
+                </div>  
+  
+                <form  
+                    action="${pageContext.request.contextPath}/merchant/login"  
+                    method="post">  
+  
+                    <div class="form-row">  
+  
+                        <label>  
+                            Username  
+                        </label>  
+  
+                        <input  
+                            type="text"  
+                            name="username"  
+                            placeholder="Merchant Username"  
+                            required>  
+  
+                    </div>  
+  
+                    <div class="form-row">  
+  
+                        <label>  
+                            Password  
+                        </label>  
+  
+                        <input  
+                            type="password"  
+                            name="password"  
+                            placeholder="Merchant Password"  
+                            required>  
+  
+                    </div>  
+  
+                    <button type="submit">  
+                        Merchant Login  
+                    </button>  
+  
+                </form>  
+  
+                <% if (request.getAttribute("loginResponse") != null) { %>  
+  
+                    <div class="login-response">  
+  
+                        <h3>  
+                            Merchant Login Successful  
+                        </h3>  
+  
+                        <p>  
+                            <b>Access Token:</b>  
+                            ${loginResponse.accessToken}  
+                        </p>  
+  
+                        <p>  
+                            <b>Token Type:</b>  
+                            ${loginResponse.tokenType}  
+                        </p>  
+  
+                        <p>  
+                            <b>Expires In:</b>  
+                            ${loginResponse.expiresInSeconds}  
+                            seconds  
+                        </p>  
+  
+                        <p>  
+                            <b>Merchant ID:</b>  
+                            ${loginResponse.merchantId}  
+                        </p>  
+  
+                        <p>  
+                            <b>Role:</b>  
+                            ${loginResponse.role}  
+                        </p>  
+  
+                    </div>  
+  
+                <% } %>  
+  
+                <% if (request.getAttribute("merchantLoginError") != null) { %>  
+  
+                    <div class="error-response">  
+  
+                        <h3>  
+                            Merchant Login Failed  
+                        </h3>  
+  
+                        <p>  
+                            ${merchantLoginError}  
+                        </p>  
+  
+                    </div>  
+  
+                <% } %>  
+  
+            </div>
 
         </div>
 
-
-        <!-- PASSWORD -->
-
-        <div class="form-row">
-
-            <label>
-                Password
-            </label>
-
-            <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                required>
-
-        </div>
-
-
-        <!-- LOGIN BUTTON -->
-
-        <button type="submit">
-            Login
-        </button>
-
-    </form>
-
-
-    <!-- LOGIN RESPONSE -->
-
-    <% if (request.getAttribute("loginResponse") != null) { %>
-
-    <div class="login-response">
-
-        <h3>
-            Login Successful
-        </h3>
-
-        <p>
-            <b>Access Token:</b>
-            ${loginResponse.accessToken}
-        </p>
-
-        <p>
-            <b>Token Type:</b>
-            ${loginResponse.tokenType}
-        </p>
-
-        <p>
-            <b>Expires In:</b>
-            ${loginResponse.expiresInSeconds}
-            seconds
-        </p>
-
-        <p>
-            <b>Merchant ID:</b>
-            ${loginResponse.merchantId}
-        </p>
-
-        <p>
-            <b>Role:</b>
-            ${loginResponse.role}
-        </p>
-
     </div>
-
-    <% } %>
-
-</div>
-
-</div>
+  
 
 
 <!-- =====================================================
@@ -1252,6 +1425,8 @@ button:hover {
 </div>
 
 
+
+
 <!-- =====================================================
      ROW 3 ENDS HERE
 ===================================================== -->
@@ -1290,97 +1465,247 @@ button:hover {
 
         <% if (request.getAttribute("order") != null) { %>
 
-            <div class="order-response">
+<div class="order-response">
 
-                <h3>
-                    My Orders
-                </h3>
+    <h3>
+        My Orders
+    </h3>
 
-                <%
-                    List<com.example.model.Merchant_Order> orders =
-                        (List<com.example.model.Merchant_Order>)
-                        request.getAttribute("order");
-                %>
+    <%
+        List<com.example.model.Merchant_Order> orders =
+            (List<com.example.model.Merchant_Order>)
+            request.getAttribute("order");
+    %>
 
+    <% if (orders.isEmpty()) { %>
 
-                <% if (orders.isEmpty()) { %>
+        <p>
+            No orders found for this merchant.
+        </p>
+
+    <% } else { %>
+
+        <div class="orders-list">
+
+            <% for (com.example.model.Merchant_Order order : orders) { %>
+
+                <div class="single-order">
 
                     <p>
-                        No orders found for this merchant.
+                        <b>Order Reference:</b>
+                        <%= order.getOrder_ref() %>
                     </p>
 
-                <% } else { %>
+                    <p>
+                        <b>Merchant ID:</b>
+                        <%= order.getMerchant_id() %>
+                    </p>
+
+                    <p>
+                        <b>Amount:</b>
+                        <%= order.getAmount() %>
+                    </p>
+
+                    <p>
+                        <b>Currency:</b>
+                        <%= order.getCurrency() %>
+                    </p>
+
+                    <p>
+                        <b>Status:</b>
+                        <%= order.getStatus() %>
+                    </p>
+
+                    <p>
+                        <b>PG Transaction Reference:</b>
+                        <%= order.getPg_txn_ref() %>
+                    </p>
+
+                    <p>
+                        <b>Checkout URL:</b>
+                        /pg/api/v1/authenticate/<%= order.getPg_txn_ref() %>
+                    </p>
+
+                    <p>
+                        <b>Created At:</b>
+                        <%= order.getCreated_at() %>
+                    </p>
+
+                    <p>
+                        <b>Updated At:</b>
+                        <%= order.getUpdated_at() %>
+                    </p>
+
+                </div>
+
+            <% } %>
+
+        </div>
+
+    <% } %>
+
+</div>
+
+ <% } %>
+ 
+</div>
+    
+ </div>   
+    
+    <!-- =====================================================
+     ROW 4
+===================================================== -->
+
+<div class="row">
 
 
-                    <% for (com.example.model.Merchant_Order order : orders) { %>
+<!-- =====================================================
+     7. GET SINGLE ORDER
+===================================================== -->
 
-                        <div class="single-order">
+<div class="box order-box">
 
-                            <p>
-                                <b>Order Reference:</b>
-                                <%= order.getOrder_ref() %>
-                            </p>
+    <h2>
+        Get Single Order
+    </h2>
 
-                            <p>
-                                <b>Merchant ID:</b>
-                                <%= order.getMerchant_id() %>
-                            </p>
+    <div class="subtitle">
+        Get order details using Order Reference
+    </div>
 
-                            <p>
-                                <b>Amount:</b>
-                                <%= order.getAmount() %>
-                            </p>
+    <form
+        action="${pageContext.request.contextPath}/merchant/ui-getOrder"
+        method="get">
 
-                            <p>
-                                <b>Currency:</b>
-                                <%= order.getCurrency() %>
-                            </p>
+        <div class="form-row">
 
-                            <p>
-                                <b>Status:</b>
-                                <%= order.getStatus() %>
-                            </p>
+            <label>
+                Order Reference *
+            </label>
 
-                            <p>
-                                <b>PG Transaction Reference:</b>
-                                <%= order.getPg_txn_ref() %>
-                            </p>
+            <input
+                type="text"
+                name="orderRef"
+                placeholder="ORD-2026-000123"
+                required>
 
-                            <p>
-                                <b>Checkout URL:</b>
-                                /pg/api/v1/authenticate/<%= order.getPg_txn_ref() %>
-                            </p>
+        </div>
 
-                            <p>
-                                <b>Created At:</b>
-                                <%= order.getCreated_at() %>
-                            </p>
+        <button type="submit">
+            Get Order
+        </button>
 
-                            <p>
-                                <b>Updated At:</b>
-                                <%= order.getUpdated_at() %>
-                            </p>
+    </form>
 
-                        </div>
 
-                    <% } %>
+    <!-- SUCCESS RESPONSE -->
 
-                <% } %>
+    <% if (request.getAttribute("singleOrder") != null) { %>
 
-            </div>
+        <div class="order-response">
 
-        <% } %>
+            <h3>
+                Order Details
+            </h3>
+
+            <p>
+                <b>Order Reference:</b>
+                ${singleOrder.orderRef}
+            </p>
+
+            <p>
+                <b>Merchant ID:</b>
+                ${singleOrder.merchantId}
+            </p>
+
+            <p>
+                <b>Amount:</b>
+                ${singleOrder.amount}
+            </p>
+
+            <p>
+                <b>Currency:</b>
+                ${singleOrder.currency}
+            </p>
+
+            <p>
+                <b>Status:</b>
+                ${singleOrder.status}
+            </p>
+
+            <p>
+                <b>PG Transaction Reference:</b>
+                ${singleOrder.pgTxnRef}
+            </p>
+
+            <p>
+                <b>Checkout URL:</b>
+                ${singleOrder.checkoutUrl}
+            </p>
+
+            <p>
+                <b>Created At:</b>
+                ${singleOrder.createdAt}
+            </p>
+
+            <p>
+                <b>Updated At:</b>
+                ${singleOrder.updatedAt}
+            </p>
+
+        </div>
+
+    <% } %>
+
+
+    <!-- 404 ERROR RESPONSE -->
+
+    <% if (request.getAttribute("singleOrderError") != null) { %>
+
+    <div class="single-order-error">
+
+        <h3>
+            Order Not Found
+        </h3>
+
+        <p>
+            <b>Status:</b>
+            ${singleOrderError.status}
+        </p>
+
+        <p>
+            <b>Error:</b>
+            ${singleOrderError.error}
+        </p>
+
+        <p>
+            <b>Message:</b>
+            ${singleOrderError.message}
+        </p>
+
+        <p>
+            <b>Path:</b>
+            ${singleOrderError.path}
+        </p>
 
     </div>
 
+<% } %>
+
+
 </div>
-    
+
 </div>
+<!-- ROW 4 ENDS HERE -->
+
+
 </div>
 <!-- MAIN ENDS -->
 
 
+</div>
 <!-- PAGE ENDS -->
+
 
 </body>
 

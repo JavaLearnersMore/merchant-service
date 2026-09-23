@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.dto.OrderErrorResponse;
 import com.example.dto.OrderRequest;
 import com.example.dto.OrderResponse;
 import com.example.model.Merchant_Order;
@@ -53,6 +54,32 @@ public class MerchantOrderUiController {
 
         List<Merchant_Order> orders =merchantOrderService.getMyOrders(1001L);
         model.addAttribute("order", orders);
+        return "registration";
+    }
+    
+    @GetMapping("/ui-getOrder")
+    public String singleOrder(
+            @RequestParam String orderRef,
+            Model model) {
+
+        OrderResponse order =
+                merchantOrderService.getMyOrderByRef(orderRef);
+
+        if (order == null) {
+
+            OrderErrorResponse errorResponse =new OrderErrorResponse(
+                            404,
+                            "Not Found",
+                            "Order not found: " + orderRef,
+                            "/api/v1/orders/" + orderRef
+                    );
+
+            model.addAttribute("singleOrderError",errorResponse);
+
+        } else {
+            model.addAttribute( "singleOrder", order);
+        }
+
         return "registration";
     }
 }

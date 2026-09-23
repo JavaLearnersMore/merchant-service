@@ -13,6 +13,8 @@ public interface MerchantOrderDao {
 
 	List<Merchant_Order> getMerchantOrderByMerchantId(long merchant_id);
 
+	Merchant_Order getMerchantOrderRef(String orderRef);
+
 	
 	
 

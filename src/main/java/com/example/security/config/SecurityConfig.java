@@ -38,7 +38,10 @@ public class SecurityConfig {
                 "/api/v1/orders",
                 "/merchant/create-order",
                 
-                "/merchant/my-orders"
+                "/merchant/my-orders",
+                
+                "/api/v1/orders/{order_ref}",
+                "/merchant/ui-getOrder"
             ).permitAll()
             .anyRequest().authenticated();
 

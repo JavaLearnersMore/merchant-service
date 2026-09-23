@@ -14,4 +14,8 @@ public interface MerchantOderService {
 
 	List<Merchant_Order> getMyOrders(long merchant_id);
 
+	OrderResponse getMyOrderByRef(String order_ref);
+
+	
+
 }

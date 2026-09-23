@@ -3,7 +3,6 @@ package com.example.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 import com.example.dao.MerchantOrderDao;
 import com.example.dto.OrderRequest;
@@ -92,5 +91,36 @@ public class MerchantOderServiceImpl implements MerchantOderService{
     }
 	
 	
+    @Override
+    public OrderResponse getMyOrderByRef(String order_ref) {
+
+        Merchant_Order order = merchantOrderDao.getMerchantOrderRef(order_ref);
+
+        // Order not found
+        if (order == null) {
+            return null;
+        }
+
+        // Order found
+        OrderResponse response = new OrderResponse();
+
+        response.setOrderRef(order.getOrder_ref());
+        response.setMerchantId(order.getMerchant_id());
+        response.setAmount(order.getAmount());
+        response.setCurrency(order.getCurrency());
+        response.setStatus(order.getStatus());
+        response.setPgTxnRef(order.getPg_txn_ref());
+
+        response.setCheckoutUrl(
+                "/pg/api/v1/authenticate/"
+                + order.getPg_txn_ref()
+        );
+
+        response.setCreatedAt(order.getCreated_at());
+        response.setUpdatedAt(order.getUpdated_at());
+
+        return response;
+    }
+
 	
 }
