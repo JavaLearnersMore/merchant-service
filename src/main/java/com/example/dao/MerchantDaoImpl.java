@@ -2,6 +2,7 @@ package com.example.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -62,30 +63,31 @@ public class MerchantDaoImpl implements MerchantDao {
     @Override
     public Merchant findById(Long id) {
 
-        String sql = "SELECT id,legal_name, email,phone,pan_number,gst_number,settlement_account_id,kyc_status, status FROM merchant WHERE id = ?";
+        String sql = "SELECT id, legal_name, email, phone, pan_number, " +
+                     "gst_number, settlement_account_id, kyc_status, status " +
+                     "FROM merchant WHERE id = ?";
 
-        return jdbcTemplate.queryForObject(
+        List<Merchant> merchants = jdbcTemplate.query(
                 sql,
                 (rs, rowNum) -> {
 
-                    Merchant merchant = new Merchant();
-
-                    merchant.setId(rs.getLong("id"));
-                    merchant.setLegalName(rs.getString("legal_name"));
-                    merchant.setEmail(rs.getString("email"));
-                    merchant.setPhone(rs.getString("phone"));
-                    merchant.setPanNumber(rs.getString("pan_number"));
-                    merchant.setGstNumber(rs.getString("gst_number"));
-                    merchant.setSettlementAccountId(
-                            rs.getString("settlement_account_id")
-                    );
-                    merchant.setKycStatus(rs.getString("kyc_status"));
-                    merchant.setStatus(rs.getString("status"));
+                  Merchant merchant = new Merchant();
+                  merchant.setId(rs.getLong("id"));
+                  merchant.setLegalName(rs.getString("legal_name"));
+                  merchant.setEmail(rs.getString("email"));
+                  merchant.setPhone(rs.getString("phone"));
+                  merchant.setPanNumber(rs.getString("pan_number"));
+                  merchant.setGstNumber(rs.getString("gst_number"));
+                  merchant.setSettlementAccountId(rs.getString("settlement_account_id"));
+                  merchant.setKycStatus(rs.getString("kyc_status"));
+                  merchant.setStatus(rs.getString("status"));
 
                     return merchant;
                 },
                 id
         );
+
+        return merchants.isEmpty() ? null : merchants.get(0);
     }
 
     @Override
@@ -130,5 +132,14 @@ public class MerchantDaoImpl implements MerchantDao {
     	jdbcTemplate.update(sql,status ,merchantId);
     	
     }
+    
+    @Override
+    public void deleteMerchant(long merchantId) {
+    	
+    	String sql="DELETE FROM merchant WHERE id = ?";
+    	
+    	jdbcTemplate.update(sql,merchantId);
+    }
+    
 
 }

@@ -17,4 +17,8 @@ public interface MerchantDao {
 
 	void UpdateStatus(long merchantId, String status);
 
+	void deleteMerchant(long merchantId);
+
+	//void updateStatus(long merchantId, String status);
+
 }

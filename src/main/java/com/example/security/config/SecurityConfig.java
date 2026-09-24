@@ -44,7 +44,13 @@ public class SecurityConfig {
                 "/merchant/ui-getOrder",
                 
                 "/api/v1/merchant/auth/login",
-                "/merchant/login"
+                "/merchant/login",
+                
+                "/api/v1/admin/merchants/ui-get",
+                "/api/v1/admin/merchants/ui-suspend",
+                
+                "/api/v1/admin/Getmerchant/{merchantId}",
+                "/api/v1/admin/SuspendMerchant/{merchantId}"
             ).permitAll()
             .anyRequest().authenticated();
 

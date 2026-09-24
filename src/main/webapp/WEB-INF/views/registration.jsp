@@ -1735,6 +1735,256 @@ button:hover {
 
 </div>
 
+
+       <!-- =====================================================
+     8. MERCHANT MANAGEMENT
+===================================================== -->
+
+<div class="box kyc-box">
+
+    <h2>
+        Merchant Management
+    </h2>
+
+    <div class="subtitle">
+        Platform Admin - Get/Suspend Merchant
+    </div>
+
+
+    <!-- MERCHANT ID -->
+
+    <div class="form-row">
+
+        <label>
+            Merchant ID *
+        </label>
+
+        <input
+            type="number"
+            id="merchantId"
+            name="merchantId"
+            placeholder="1010"
+            required>
+
+    </div>
+
+
+    <!-- GET MERCHANT -->
+
+    <form
+        action="${pageContext.request.contextPath}/api/v1/admin/merchants/ui-get"
+        method="get">
+
+        <input
+            type="hidden"
+            id="getMerchantId"
+            name="merchantId">
+
+        <button
+            type="submit"
+            onclick="
+                if (!validateAdminLogin()) {
+                    return false;
+                }
+
+                const merchantId = document.getElementById('merchantId').value;
+
+                if (!merchantId) {
+                    alert('Please enter Merchant ID.');
+                    return false;
+                }
+
+                document.getElementById('getMerchantId').value = merchantId;
+            ">
+
+            Get Merchant
+
+        </button>
+
+    </form>
+
+
+    <!-- GET MERCHANT RESPONSE -->
+
+    <% if (request.getAttribute("merchantResponse") != null) { %>
+
+        <div class="response">
+
+            <h3>
+                Merchant Details
+            </h3>
+
+             <p>
+               <strong>Merchant ID:</strong>
+               ${merchantResponse.id}
+            </p>
+
+            <p>
+              <strong>Legal Name:</strong>
+              ${merchantResponse.legalName}
+           </p>
+
+           <p>
+              <strong>Email:</strong>
+              ${merchantResponse.email}
+           </p>
+
+          <p>
+             <strong>Phone:</strong>
+             ${merchantResponse.phone}
+          </p>
+
+          <p>
+             <strong>PAN Number:</strong>
+             ${merchantResponse.panNumber}
+          </p>
+
+           <p>
+             <strong>GST Number:</strong>
+              ${merchantResponse.gstNumber}
+          </p>
+
+          <p>               
+             <strong>Settlement Account ID:</strong>
+             ${merchantResponse.settlementAccountId}
+         </p>
+
+         <p>
+             <strong>KYC Status:</strong>
+             ${merchantResponse.kycStatus}
+        </p>
+
+       <p>
+             <strong>Status:</strong>
+             ${merchantResponse.status}
+       </p>
+
+        </div>
+
+    <% } %>
+
+
+    <!-- SUSPEND MERCHANT -->
+
+    <form
+        action="${pageContext.request.contextPath}/api/v1/admin/merchants/ui-suspend"
+        method="post">
+
+        <input
+            type="hidden"
+            id="suspendMerchantId"
+            name="merchantId">
+
+        <button
+            type="submit"
+            onclick="
+                if (!validateAdminLogin()) {
+                    return false;
+                }
+
+                const merchantId = document.getElementById('merchantId').value;
+
+                if (!merchantId) {
+                    alert('Please enter Merchant ID.');
+                    return false;
+                }
+
+                if (!confirm('Are you sure you want to suspend merchant ' + merchantId + '?')) {
+                    return false;
+                }
+
+                document.getElementById('suspendMerchantId').value = merchantId;
+            ">
+
+            Suspend Merchant
+
+        </button>
+
+    </form>
+
+
+    <!-- SUSPEND RESPONSE -->
+
+    <% if (request.getAttribute("suspendResponse") != null) { %>
+
+        <div class="response">
+
+            <h3>
+                Merchant Suspended Successfully
+            </h3>
+
+            <p>
+                <b>Merchant ID:</b>
+                ${suspendResponse.id}
+            </p>
+
+            <p>
+                <b>Legal Name:</b>
+                ${suspendResponse.legalName}
+            </p>
+
+            <p>
+                <b>Email:</b>
+                ${suspendResponse.email}
+            </p>
+            
+           
+          <p>
+            <b>phone:</b>
+             ${suspendResponse.phone}
+          </p>
+
+          <p>
+             <b>PAN Number:</b>
+             ${suspendResponse.panNumber}
+          </p>
+
+           <p>
+            <b>GST Number:</b>
+              ${suspendResponse.gstNumber}
+          </p>
+
+          <p>               
+           <b>Settlement Account ID:</b>
+             ${suspendResponse.settlementAccountId}
+         
+            <p>
+                <b>KYC Status:</b>
+                ${suspendResponse.kycStatus}
+            </p>
+
+            <p>
+                <b>Status:</b>
+                ${suspendResponse.status}
+            </p>
+
+        </div>
+
+    <% } %>
+
+
+    <!-- SUSPEND ERROR -->
+
+    <% if (request.getAttribute("suspendError") != null) { %>
+
+        <div class="error-response">
+
+            <h3>
+                Suspension Failed
+            </h3>
+
+            <p>
+                ${suspendError}
+            </p>
+
+        </div>
+
+    <% } %>
+
+</div>
+
+
+
 </div>
 <!-- ROW 4 ENDS HERE -->
 
