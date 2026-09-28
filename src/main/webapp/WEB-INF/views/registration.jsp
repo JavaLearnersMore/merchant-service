@@ -1989,6 +1989,112 @@ button:hover {
 <!-- ROW 4 ENDS HERE -->
 
 
+     <!-- =====================================================
+     ROW 5
+===================================================== -->
+
+<div class="row">
+
+    <!-- =================================================
+         9. SET WEBHOOK CALLBACK URL
+    ================================================= -->
+
+    <div class="box webhook-box">
+
+        <h2>
+            Set Webhook Callback URL
+        </h2>
+
+        <div class="subtitle">
+            Payment Gateway sends async status updates for this merchant's order
+        </div>
+
+        <form
+            action="${pageContext.request.contextPath}/merchant/ui-webhook-config"
+            method="post">
+
+            <div class="form-row">
+
+                <label>
+                    Callback URL *
+                </label>
+
+                <input
+                    type="url"
+                    name="url"
+                    placeholder="http://localhost:8081/api/v1/webhooks/pg-callback"
+                    required>
+
+            </div>
+
+            <button
+                type="submit"
+                onclick="return validateMerchantLogin();">
+
+                Set Webhook Config
+
+            </button>
+
+        </form>
+
+
+        <!-- SUCCESS RESPONSE -->
+
+        <% if (request.getAttribute("webhookResponse") != null) { %>
+
+            <div class="response">
+
+                <h3>
+                    Webhook Configuration Updated Successfully
+                </h3>
+
+                <p>
+                    <b>Merchant ID:</b>
+                    ${webhookResponse.merchantId}
+                </p>
+
+                <p>
+                    <b>Callback URL:</b>
+                    ${webhookResponse.url}
+                </p>
+
+                <p>
+                    <b>Active:</b>
+                    ${webhookResponse.active}
+                </p>
+
+            </div>
+
+        <% } %>
+
+
+        <!-- ERROR RESPONSE -->
+
+        <% if (request.getAttribute("webhookError") != null) { %>
+
+            <div class="error-response">
+
+                <h3>
+                    Webhook Configuration Failed
+                </h3>
+
+                <p>
+                    ${webhookError}
+                </p>
+
+            </div>
+
+        <% } %>
+
+    </div>
+
+</div>
+
+
+
+
+
+
 </div>
 <!-- MAIN ENDS -->
 

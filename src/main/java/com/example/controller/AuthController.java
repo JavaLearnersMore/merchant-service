@@ -75,21 +75,25 @@ public class AuthController {
 	}
 	
 	
+	//merchant login api
 	
-    // ==============================
-    // MERCHANT LOGIN API
-    // ==============================
+	@PostMapping("/api/v1/merchant/auth/login")
+	@ResponseBody
+	public ResponseEntity<LoginResponse> merchantLogin(
+	        @RequestBody LoginRequest request,
+	        HttpSession session) {
 
-    @PostMapping("/api/v1/merchant/auth/login")
-    @ResponseBody
-    public ResponseEntity<LoginResponse> merchantLogin(
-            @RequestBody LoginRequest request) {
+	    LoginResponse response = authService.merchantLogin(request);
 
-        LoginResponse response =authService.merchantLogin(request);
+	    // Store merchant details in session
+	    session.setAttribute("merchantLoginResponse", response);
+	    session.setAttribute("merchantId", response.getMerchantId());
+	    session.setAttribute("merchantRole", response.getRole());
+	    session.setAttribute("merchantUsername", request.getUsername());
 
-        return ResponseEntity.ok(response);
-    }
-
+	    return ResponseEntity.ok(response);
+	}  
+	
 
     // ==============================
     // MERCHANT LOGIN UI
@@ -114,6 +118,7 @@ public class AuthController {
             // Store merchant login in session
             session.setAttribute("merchantLoginResponse", response);
             session.setAttribute("merchantId", response.getMerchantId());
+            model.addAttribute("merchantLoginResponse", response);
             session.setAttribute("merchantRole", response.getRole());
             session.setAttribute("merchantUsername", username);
 

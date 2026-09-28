@@ -50,7 +50,10 @@ public class SecurityConfig {
                 "/api/v1/admin/merchants/ui-suspend",
                 
                 "/api/v1/admin/Getmerchant/{merchantId}",
-                "/api/v1/admin/SuspendMerchant/{merchantId}"
+                "/api/v1/admin/SuspendMerchant/{merchantId}",
+                
+                "/merchant/ui-webhook-config",
+                "/api/v1/webhook-config"
             ).permitAll()
             .anyRequest().authenticated();
 
