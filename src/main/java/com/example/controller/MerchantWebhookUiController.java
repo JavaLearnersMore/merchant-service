@@ -1,9 +1,11 @@
 package com.example.controller;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.dto.WebhookConfigRequest;
@@ -24,7 +26,7 @@ public class MerchantWebhookUiController {
 
     @PostMapping("/ui-webhook-config")
     public String saveWebhookConfig(
-            @RequestParam("url") String url,
+    		 @Valid @ModelAttribute WebhookConfigRequest request,
             Model model,
             HttpSession session) {
 
@@ -41,9 +43,9 @@ public class MerchantWebhookUiController {
 
             Long merchantId =Long.valueOf(merchantIdObject.toString());
 
-            WebhookConfigRequest request = new WebhookConfigRequest();
+            //WebhookConfigRequest request = new WebhookConfigRequest();
 
-            request.setUrl(url);
+            //request.setUrl(url);
             request.setActive(true);
 
             WebhookConfigResponse response =webhookConfigService.saveOrUpdate( merchantId,request);
@@ -57,4 +59,21 @@ public class MerchantWebhookUiController {
 
         return "registration";
     }
+    
+    
+    
+    @ExceptionHandler(BindException.class)
+    public String handleValidationError(
+            BindException ex,
+            Model model) {
+
+        String message = ex.getBindingResult()
+                .getFieldError()
+                .getDefaultMessage();
+
+        model.addAttribute("webhookError", message);
+
+        return "registration";
+    }
+    
 }

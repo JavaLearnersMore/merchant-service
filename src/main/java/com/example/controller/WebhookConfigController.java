@@ -1,8 +1,10 @@
 package com.example.controller;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.dto.WebhookConfigRequest;
@@ -23,7 +25,7 @@ public class WebhookConfigController {
 
     @PutMapping
     public ResponseEntity<?> updateWebhookConfig(
-            @RequestBody WebhookConfigRequest request,
+    		@Valid @RequestBody WebhookConfigRequest request,
             HttpSession session) {
 
         try {
@@ -42,5 +44,17 @@ public class WebhookConfigController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+    
+   //handle exception
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleValidationError(
+            MethodArgumentNotValidException ex) {
+
+        String message = ex.getBindingResult()
+                .getFieldError()
+                .getDefaultMessage();
+
+        return ResponseEntity.badRequest().body(message);
     }
 }

@@ -822,7 +822,7 @@ request.getAttribute("org.springframework.validation.BindingResult.merchantRegis
                     Login as Platform Administrator  
                 </div>  
   
-                <form  
+                <form:form  
                     action="${pageContext.request.contextPath}/login"  
                     method="post" modelAttribute="loginRequest">  
   
@@ -866,7 +866,7 @@ request.getAttribute("org.springframework.validation.BindingResult.merchantRegis
                         Admin Login  
                     </button>  
   
-                </form>  
+                </form:form>  
   
                 <% if (request.getAttribute("loginResponse") != null) { %>  
   
@@ -936,7 +936,7 @@ request.getAttribute("org.springframework.validation.BindingResult.merchantRegis
                     Login to Merchant Portal  
                 </div>  
   
-                <form  
+                <form:form  
                     action="${pageContext.request.contextPath}/merchant/login"  
                     method="post"  modelAttribute="merchantLoginRequest">  
   
@@ -976,7 +976,7 @@ request.getAttribute("org.springframework.validation.BindingResult.merchantRegis
                         Merchant Login  
                     </button>  
   
-                </form>  
+                </form:form>  
   
                 <% if (request.getAttribute("merchantLoginResponse") != null) { %>  
   
@@ -1061,9 +1061,9 @@ request.getAttribute("org.springframework.validation.BindingResult.merchantRegis
         Platform Admin - Update Merchant KYC
     </div>
 
-    <form
+    <form:form
         action="${pageContext.request.contextPath}/api/v1/admin/merchants/ui-kyc"
-        method="post">
+        method="post" modelAttribute="kycRequest">
 
         <!-- MERCHANT ID -->
 
@@ -1107,6 +1107,10 @@ request.getAttribute("org.springframework.validation.BindingResult.merchantRegis
                 </option>
 
             </select>
+            
+            <form:errors
+            path="kycStatus"
+            cssClass="validation-error" />
 
         </div>
 
@@ -1134,7 +1138,7 @@ request.getAttribute("org.springframework.validation.BindingResult.merchantRegis
             Update KYC
         </button>
 
-    </form>
+    </form:form>
 
 
     <!-- KYC RESPONSE -->
@@ -1208,9 +1212,9 @@ request.getAttribute("org.springframework.validation.BindingResult.merchantRegis
         Platform Admin - Approve Status
     </div>
 
-    <form
+    <form:form
         action="${pageContext.request.contextPath}/api/v1/admin/merchants/ui-approve"
-        method="post">
+        method="post"  modelAttribute="approveMerchantRequest">
 
         <!-- MERCHANT ID -->
 
@@ -1252,6 +1256,10 @@ request.getAttribute("org.springframework.validation.BindingResult.merchantRegis
                 </option>
 
             </select>
+            
+            <form:errors
+            path="status"
+            cssClass="validation-error" />
 
         </div>
 
@@ -1262,7 +1270,7 @@ request.getAttribute("org.springframework.validation.BindingResult.merchantRegis
             Approve Merchant
         </button>
 
-    </form>
+    </form:form>
 
 
     <!-- APPROVE RESPONSE -->
@@ -1388,6 +1396,13 @@ request.getAttribute("org.springframework.validation.BindingResult.merchantRegis
                 name="orderRef"
                 placeholder="ORD-2026-000123"
                 required>
+                
+                 <% if (request.getAttribute("orderErrors") != null) { %>
+        <span class="validation-error">
+            ${orderErrors.orderRef}
+        </span>
+    <% } %>
+
 
         </div>
 
@@ -1408,6 +1423,12 @@ request.getAttribute("org.springframework.validation.BindingResult.merchantRegis
                 step="0.01"
                 min="0.01"
                 required>
+                
+                <% if (request.getAttribute("orderErrors") != null) { %>
+        <span class="validation-error">
+            ${orderErrors.amount}
+        </span>
+    <% } %>
 
         </div>
 
@@ -1430,6 +1451,14 @@ request.getAttribute("org.springframework.validation.BindingResult.merchantRegis
                 </option>
 
             </select>
+            
+            <% if (request.getAttribute("orderErrors") != null) { %>
+
+    <span class="validation-error">
+        ${orderErrors.currency}
+    </span>
+
+<% } %>
 
         </div>
 
@@ -1448,6 +1477,12 @@ request.getAttribute("org.springframework.validation.BindingResult.merchantRegis
                 name="customerEmail"
                 placeholder="customer@example.com"
                 required>
+                
+                <% if (request.getAttribute("orderErrors") != null) { %>
+        <span class="validation-error">
+            ${orderErrors.customerEmail}
+        </span>
+    <% } %>
 
         </div>
 

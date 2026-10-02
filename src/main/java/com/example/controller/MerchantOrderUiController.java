@@ -1,13 +1,20 @@
 package com.example.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindException;
 
 import com.example.dto.OrderErrorResponse;
 import com.example.dto.OrderRequest;
@@ -28,18 +35,14 @@ public class MerchantOrderUiController {
 
     @PostMapping("/create-order")
     public String createOrder(
-            @RequestParam String orderRef,
-            @RequestParam Double amount,
-            @RequestParam String currency,
-            @RequestParam String customerEmail,
+            @Valid @ModelAttribute("orderRequest") OrderRequest request,
             Model model) {
 
-        OrderRequest request = new OrderRequest();
-
-        request.setOrderRef(orderRef);
-        request.setAmount(amount);
-        request.setCurrency(currency);
-        request.setCustomerEmail(customerEmail);
+//        OrderRequest request = new OrderRequest();
+//        request.setOrderRef(orderRef);
+//        request.setAmount(amount);
+//        request.setCurrency(currency);
+//        request.setCustomerEmail(customerEmail);
 
         OrderResponse response = merchantOrderService.createOrders(request, 1001L);
 
@@ -47,6 +50,31 @@ public class MerchantOrderUiController {
 
         return "registration";
     }
+    
+    
+ // VALIDATION ERROR
+   
+    @ExceptionHandler(BindException.class)
+    public String handleValidationException(
+            BindException ex,
+            Model model) {
+
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getBindingResult()
+          .getFieldErrors()
+          .forEach(error ->
+              errors.put(
+                  error.getField(),
+                  error.getDefaultMessage()
+              )
+          );
+
+        model.addAttribute("orderErrors", errors);
+
+        return "registration";
+    }
+    
     
     
     @GetMapping("/my-orders")
