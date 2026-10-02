@@ -2,6 +2,8 @@
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
+    <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+    
     <%@ page import="java.util.List" %>
 
 <!DOCTYPE html>
@@ -242,6 +244,14 @@ button:hover {
 .response p {
     margin: 6px 0;
 }
+
+.validation-error {
+    display: block;
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
 
 
 /* =========================
@@ -511,10 +521,48 @@ button:hover {
     <div class="subtitle">
         Create merchant and its first ADMIN portal user
     </div>
+    
+    
+    <%org.springframework.validation.BindingResult bindingResult =(org.springframework.validation.BindingResult)
+request.getAttribute("org.springframework.validation.BindingResult.merchantRegisterRequest");%>
 
-    <form
-        action="${pageContext.request.contextPath}/api/v1/merchants/ui-register"
-        method="post">
+<% if (bindingResult != null && bindingResult.hasErrors()) { %>
+
+<div class="error-response">
+
+    <h3>Registration Failed</h3>
+
+    <% for (org.springframework.validation.FieldError error :
+            bindingResult.getFieldErrors()) { %>
+
+        <p>
+            <b><%= error.getField() %>:</b>
+            <%= error.getDefaultMessage() %>
+        </p>
+
+    <% } %>
+
+</div>
+
+<% } else if (request.getAttribute("registrationError") != null) { %>
+
+<div class="error-response">
+
+    <h3>Registration Failed</h3>
+
+    <p>
+        <%= request.getAttribute("registrationError") %>
+    </p>
+
+</div>
+
+<% } %>
+    
+
+    <form:form
+    action="${pageContext.request.contextPath}/api/v1/merchants/ui-register"
+    method="post"
+    modelAttribute="merchantRegisterRequest">
 
         <!-- LEGAL NAME -->
 
@@ -528,6 +576,10 @@ button:hover {
                 name="legalName"
                 placeholder="My New Shop Pvt Ltd"
                 required>
+                
+            <form:errors
+                path="legalName"
+                cssClass="validation-error"/>
 
         </div>
 
@@ -545,6 +597,10 @@ button:hover {
                 name="email"
                 placeholder="owner@myshop.com"
                 required>
+             
+            <form:errors
+                path="email"
+                cssClass="validation-error"/>    
 
         </div>
 
@@ -561,6 +617,10 @@ button:hover {
                 name="phone"
                 placeholder="9123456780"
                 required>
+                
+            <form:errors
+                path="phone"
+                cssClass="validation-error"/>    
 
         </div>
 
@@ -577,10 +637,11 @@ button:hover {
                 name="panNumber"
                 placeholder="ABCDE1234F"
                 required>
+            <form:errors
+                 path="panNumber"
+                 cssClass="validation-error"/>
 
         </div>
-
-
         <!-- GST -->
 
         <div class="form-row">
@@ -593,9 +654,11 @@ button:hover {
                 name="gstNumber"
                 placeholder="27ABCDE1234F1Z5"
                 required>
+            <form:errors
+                path="gstNumber"
+                cssClass="validation-error"/>    
 
         </div>
-
 
         <!-- SETTLEMENT ACCOUNT -->
 
@@ -609,6 +672,9 @@ button:hover {
                 name="settlementAccountId"
                 placeholder="NODAL-MERCHANT-2002"
                 required>
+            <form:errors
+                path="settlementAccountId"
+                cssClass="validation-error"/>
 
         </div>
 
@@ -625,7 +691,9 @@ button:hover {
                 name="adminUsername"
                 placeholder="newshopadmin"
                 required>
-
+            <form:errors
+                path="adminUsername"
+                cssClass="validation-error"/>
         </div>
 
 
@@ -642,6 +710,9 @@ button:hover {
                 name="adminPassword"
                 placeholder="NewShop@123"
                 required>
+            <form:errors
+                path="adminPassword"
+                cssClass="validation-error"/>    
 
         </div>
 
@@ -653,6 +724,9 @@ button:hover {
                    <option value="ADMIN">ADMIN</option>
                    <option value="MERCHANT">MERCHANT</option>
                 </select>
+                <form:errors
+                    path="role"
+                    cssClass="validation-error"/>
         </div>
 
         <!-- REGISTER BUTTON -->
@@ -661,7 +735,7 @@ button:hover {
             Register Merchant
         </button>
 
-    </form>
+    </form:form>
 
 
     <!-- REGISTRATION RESPONSE -->
@@ -750,7 +824,7 @@ button:hover {
   
                 <form  
                     action="${pageContext.request.contextPath}/login"  
-                    method="post">  
+                    method="post" modelAttribute="loginRequest">  
   
                     <div class="form-row">  
   
@@ -762,7 +836,11 @@ button:hover {
                             type="text"  
                             name="username"  
                             placeholder="Admin Username"  
-                            required>  
+                            required> 
+                            
+                        <form:errors 
+                            path="username" 
+                            cssClass="validation-error"/>     
   
                     </div>  
   
@@ -776,7 +854,11 @@ button:hover {
                             type="password"  
                             name="password"  
                             placeholder="Admin Password"  
-                            required>  
+                            required>
+                            
+                        <form:errors 
+                            path="password" 
+                            cssClass="validation-error"/>  
   
                     </div>  
   
@@ -856,7 +938,7 @@ button:hover {
   
                 <form  
                     action="${pageContext.request.contextPath}/merchant/login"  
-                    method="post">  
+                    method="post"  modelAttribute="merchantLoginRequest">  
   
                     <div class="form-row">  
   
@@ -868,7 +950,9 @@ button:hover {
                             type="text"  
                             name="username"  
                             placeholder="Merchant Username"  
-                            required>  
+                            required> 
+                            
+                         <form:errors path="username" cssClass="validation-error"/>    
   
                     </div>  
   
@@ -883,6 +967,8 @@ button:hover {
                             name="password"  
                             placeholder="Merchant Password"  
                             required>  
+                           
+                         <form:errors path="password" cssClass="validation-error"/>  
   
                     </div>  
   
@@ -1947,6 +2033,7 @@ button:hover {
           <p>               
            <b>Settlement Account ID:</b>
              ${suspendResponse.settlementAccountId}
+           </p>  
          
             <p>
                 <b>KYC Status:</b>

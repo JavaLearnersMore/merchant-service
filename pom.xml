@@ -58,6 +58,13 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         
+        <!-- Validations -->
+        <dependency>
+           <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        
+        
         <!-- for export into excel -->
         <dependency>
            <groupId>org.apache.poi</groupId>

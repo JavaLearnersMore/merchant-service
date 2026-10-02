@@ -1,13 +1,16 @@
 package com.example.controller;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,11 +32,16 @@ public class AuthController {
 	
 	//login
 	@GetMapping("/login")
-    public String login() {
-        return "login";
-    }
+	public String login(Model model) {
 
-	//api 
+	    model.addAttribute("loginRequest", new LoginRequest());
+
+	    return "login";
+	}
+	
+	
+
+	//API 
 	@PostMapping("/api/v1/auth/login")
 	@ResponseBody
 	public ResponseEntity<LoginResponse> loginMerchant(@RequestBody LoginRequest request) {
@@ -45,24 +53,35 @@ public class AuthController {
 	}
 	
 	
-	//login ui response
+	//loginUI response
 	@PostMapping("/login")
 	public String loginFromUi(
-	        @RequestParam String username,
-	        @RequestParam String password,
-	        Model model,
-	        HttpSession session) {
+	   @Valid @ModelAttribute("loginRequest") LoginRequest request,
+	   BindingResult result,
+	   Model model,
+	   HttpSession session) {
 
-	    LoginRequest request = new LoginRequest();
-	    request.setUsername(username);
-	    request.setPassword(password);
+//	    LoginRequest request = new LoginRequest();
+//	    request.setUsername(username);
+//	    request.setPassword(password);
+		
+		//  Check validation errors 
+		if (result.hasErrors()) { 
+			result.getFieldErrors().forEach(error -> {
+				System.out.println( error.getField() + " = " + error.getDefaultMessage() );
+				}
+			);
+			return "registration";
+		}
+		
+		
 	    try {
 	        LoginResponse response = authService.login(request);
 
 	        model.addAttribute("loginResponse", response);
 
 	        session.setAttribute("loginResponse", response);
-	        session.setAttribute("adminUsername", username);
+	        session.setAttribute("adminUsername",request.getUsername());
 	        session.setAttribute("adminRole", response.getRole());
 	        session.setAttribute("adminMerchantId", response.getMerchantId());
 
@@ -101,15 +120,27 @@ public class AuthController {
 
     @PostMapping("/merchant/login")
     public String merchantLoginFromUi(
-            @RequestParam String username,
-            @RequestParam String password,
+    		@Valid @ModelAttribute("merchantLoginRequest") LoginRequest request,
+    		BindingResult result,
             Model model,
             HttpSession session) {
 
-        LoginRequest request = new LoginRequest();
-
-        request.setUsername(username);
-        request.setPassword(password);
+//        LoginRequest request = new LoginRequest();
+//
+//        request.setUsername(username);
+//        request.setPassword(password);
+    	
+    	if (result.hasErrors()) {
+    		
+    		result.getFieldErrors().forEach(error -> { 
+    			System.out.println( error.getField() + " = " + error.getDefaultMessage() );
+    			}
+    		); 
+    		
+    		return "registration"; 
+    	}
+    	
+    	
         try {
             LoginResponse response = authService.merchantLogin(request);
 
@@ -120,7 +151,7 @@ public class AuthController {
             session.setAttribute("merchantId", response.getMerchantId());
             model.addAttribute("merchantLoginResponse", response);
             session.setAttribute("merchantRole", response.getRole());
-            session.setAttribute("merchantUsername", username);
+            session.setAttribute("merchantUsername",request.getUsername());
 
         } catch (RuntimeException e) {
 
