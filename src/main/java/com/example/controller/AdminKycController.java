@@ -21,6 +21,7 @@ import com.example.dto.KycRequest;
 import com.example.dto.KycResponse;
 import com.example.dto.MerchantRegisterRequest;
 import com.example.dto.MerchantResponse;
+import com.example.dto.MerchantStatusRequest;
 import com.example.service.AdminKycService;
 import com.example.service.AdminKycServiceImpl;
 
@@ -38,7 +39,7 @@ public class AdminKycController {
 	@PutMapping("{merchantId}/kyc")
 	@ResponseBody
 	public ResponseEntity<KycResponse> updateKyc(@RequestBody KycRequest request,
-			@PathVariable long merchantId,
+			 @Valid @PathVariable long merchantId,
 			Model model){
 		
 	KycResponse response=adminKycService.updateKycStatus(merchantId,request);		
@@ -57,10 +58,6 @@ public class AdminKycController {
 	        return "registration";
 	    }
 
-//        KycRequest request = new KycRequest();
-//        request.setKycStatus(kycStatus);
-//        request.setRemarks(remarks);
-
         try {
             KycResponse response =
                     adminKycService.updateKycStatus(merchantId, request);
@@ -78,7 +75,7 @@ public class AdminKycController {
 	@PutMapping("/{merchantId}/approve")
     @ResponseBody
     public ResponseEntity<KycApprovedResponse> approveMerchant(
-            @PathVariable Long merchantId) {
+            @Valid @PathVariable Long merchantId) {
 
         KycApprovedResponse response =adminKycService.approveMerchant(merchantId);
 
@@ -86,13 +83,19 @@ public class AdminKycController {
     }
 	
 	@PostMapping("/ui-approve")
-    public String approveMerchantFromUi(
-            @RequestParam Long merchantId,
-            @RequestParam String status,
-            Model model) {
+	public String approveMerchantFromUi(
+	        @Valid @ModelAttribute("merchantStatusRequest")
+	        MerchantStatusRequest request,
+	        BindingResult result,
+	        Model model) {
+
+	    if (result.hasErrors()) {
+	        return "registration";
+	    }
+
 
         try {
-            KycApprovedResponse response =adminKycService.updateMerchantStatus(merchantId,status);
+            KycApprovedResponse response =adminKycService.updateMerchantStatus(request.getMerchantId(),request.getStatus());
             model.addAttribute("approveResponse",response);
 
         } catch (Exception e) {

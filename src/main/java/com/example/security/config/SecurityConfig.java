@@ -9,12 +9,12 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
-
+    
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
+
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http) throws Exception {
@@ -22,40 +22,7 @@ public class SecurityConfig {
         http
             .csrf().disable()
             .authorizeRequests()
-            .antMatchers(
-                "/",
-                "/login",
-                "/api/v1/auth/login",
-                "/api/v1/admin/merchants/ui-kyc",
-                "/api/v1/admin/merchants/{merchantId}/kyc",
-                
-                "/api/v1/admin/merchants/*/approve",
-                "/api/v1/admin/merchants/ui-approve",
-                
-                "/api/v1/merchants/register",
-                "/api/v1/merchants/ui-register",
-                
-                "/api/v1/orders",
-                "/merchant/create-order",
-                
-                "/merchant/my-orders",
-                
-                "/api/v1/orders/{order_ref}",
-                "/merchant/ui-getOrder",
-                
-                "/api/v1/merchant/auth/login",
-                "/merchant/login",
-                
-                "/api/v1/admin/merchants/ui-get",
-                "/api/v1/admin/merchants/ui-suspend",
-                
-                "/api/v1/admin/Getmerchant/{merchantId}",
-                "/api/v1/admin/SuspendMerchant/{merchantId}",
-                
-                "/merchant/ui-webhook-config",
-                "/api/v1/webhook-config"
-            ).permitAll()
-            .anyRequest().authenticated();
+            .anyRequest().permitAll();
 
         return http.build();
     }

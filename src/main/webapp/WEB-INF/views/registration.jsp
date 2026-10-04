@@ -1214,7 +1214,7 @@ request.getAttribute("org.springframework.validation.BindingResult.merchantRegis
 
     <form:form
         action="${pageContext.request.contextPath}/api/v1/admin/merchants/ui-approve"
-        method="post"  modelAttribute="approveMerchantRequest">
+        method="post"  modelAttribute="merchantStatusRequest">
 
         <!-- MERCHANT ID -->
 
