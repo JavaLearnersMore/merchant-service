@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dto.KycApprovedResponse;
 import com.example.dto.KycRequest;
@@ -25,7 +26,7 @@ import com.example.dto.MerchantStatusRequest;
 import com.example.service.AdminKycService;
 import com.example.service.AdminKycServiceImpl;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1/admin/merchants")
 public class AdminKycController {
 	
@@ -36,13 +37,20 @@ public class AdminKycController {
 	}
 	
 	
-	@PutMapping("{merchantId}/kyc")
-	@ResponseBody
-	public ResponseEntity<KycResponse> updateKyc(@RequestBody KycRequest request,
-			 @Valid @PathVariable long merchantId,
-			Model model){
-		
-	KycResponse response=adminKycService.updateKycStatus(merchantId,request);		
+//	@PutMapping("{merchantId}/kyc")
+//	@ResponseBody
+//	public ResponseEntity<KycResponse> updateKyc(@RequestBody KycRequest request,
+//			 @Valid @PathVariable long merchantId,
+//			Model model){
+//		
+//	KycResponse response=adminKycService.updateKycStatus(merchantId,request);		
+//	return ResponseEntity.ok(response);
+//	}
+	
+	@PutMapping("/kyc")
+	public ResponseEntity<KycResponse> updateKyc(@RequestBody KycRequest request){
+		System.out.println("Inside kyc updateKyc");
+	KycResponse response=adminKycService.updateKycStatus(request);		
 	return ResponseEntity.ok(response);
 	}
 	
@@ -60,7 +68,7 @@ public class AdminKycController {
 
         try {
             KycResponse response =
-                    adminKycService.updateKycStatus(merchantId, request);
+                    adminKycService.updateKycStatus(request);
 
             model.addAttribute("kycResponse", response);
 

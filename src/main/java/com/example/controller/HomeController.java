@@ -6,9 +6,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 	
+//	@GetMapping("/")
+//    public String registraction() {
+//        return "registration";
+//    }
+	
 	@GetMapping("/")
-    public String registraction() {
-        return "registration";
+    public String mainApp() {
+        return "MainApp";
     }
 	
 	

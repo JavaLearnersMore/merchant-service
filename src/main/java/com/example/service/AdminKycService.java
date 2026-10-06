@@ -6,7 +6,7 @@ import com.example.dto.KycResponse;
 
 public interface AdminKycService {
 
-	KycResponse updateKycStatus(Long merchantId, KycRequest request);
+	KycResponse updateKycStatus(KycRequest request);
 
 	KycApprovedResponse approveMerchant(Long merchantId);
 

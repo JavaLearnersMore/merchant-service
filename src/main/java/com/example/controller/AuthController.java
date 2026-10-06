@@ -15,12 +15,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dto.LoginRequest;
 import com.example.dto.LoginResponse;
 import com.example.service.AuthService;
 
-@Controller
+@RestController
 public class AuthController {
 	
 	@Autowired
@@ -41,7 +42,7 @@ public class AuthController {
 	
 	
 
-	//API 
+	//API admin login
 	@PostMapping("/api/v1/auth/login")
 	@ResponseBody
 	public ResponseEntity<LoginResponse> loginMerchant(@RequestBody LoginRequest request) {

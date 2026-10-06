@@ -16,7 +16,7 @@ public class JwtService {
     private final String SECRET =
             "my-secret-key-for-merchant-service-123456789";
 
-    private final long EXPIRATION = 3600 * 1000;
+    private final long EXPIRATION = 3600000;
 
     public String generateToken(Long merchantId, String username,
             String role) {

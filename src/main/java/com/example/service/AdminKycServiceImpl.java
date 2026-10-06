@@ -17,20 +17,20 @@ public class AdminKycServiceImpl implements AdminKycService{
         this.merchantDao = merchantDao;       
     }
 
-	public KycResponse updateKycStatus(Long merchantId, KycRequest request) {
+	public KycResponse updateKycStatus(KycRequest request) {
 		// 1. Merchant find 
-        Merchant merchant = merchantDao.findById(merchantId);
+        Merchant merchant = merchantDao.findById(request.getMerchantId());
         
         if (merchant == null) {
             throw new IllegalArgumentException(
-                    "Merchant not found with ID: " + merchantId);
+                    "Merchant not found with ID: " + request.getMerchantId());
         }
 
         // 2. KYC status update
-        merchantDao.UpdatekycStatus(merchantId,request.getKycStatus());
+        merchantDao.UpdatekycStatus(request.getMerchantId(),request.getKycStatus());
 
         // 3. Updated merchant 
-        Merchant updatedMerchant =merchantDao.findById(merchantId);
+        Merchant updatedMerchant =merchantDao.findById(request.getMerchantId());
 
         // 4. create Response 
         KycResponse response = new KycResponse();

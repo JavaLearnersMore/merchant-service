@@ -28,6 +28,7 @@ public class WebhookConfigController {
     		@Valid @RequestBody WebhookConfigRequest request,
             HttpSession session) {
 
+    	System.out.println("Inside updateWebhookConfig");
         try {
             Object merchantIdObject = session.getAttribute("merchantId");
 
