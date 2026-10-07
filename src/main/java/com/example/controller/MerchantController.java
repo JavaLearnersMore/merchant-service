@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +26,7 @@ public class MerchantController {
     
     @PostMapping("/register")
     public ResponseEntity<MerchantResponse> registerMerchant(
-            @RequestBody MerchantRegisterRequest request) {
+    		 @Valid @RequestBody MerchantRegisterRequest request) {
 
         MerchantResponse response = merchantService.registerMerchant(request);
 

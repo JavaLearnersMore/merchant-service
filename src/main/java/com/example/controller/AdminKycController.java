@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ import com.example.dto.MerchantStatusRequest;
 import com.example.service.AdminKycService;
 import com.example.service.AdminKycServiceImpl;
 
+@Validated
 @RestController
 @RequestMapping("/api/v1/admin/merchants")
 public class AdminKycController {
@@ -48,36 +50,37 @@ public class AdminKycController {
 //	}
 	
 	@PutMapping("/kyc")
-	public ResponseEntity<KycResponse> updateKyc(@RequestBody KycRequest request){
+	public ResponseEntity<KycResponse> updateKyc(
+			@Valid @RequestBody KycRequest request){
 		System.out.println("Inside kyc updateKyc");
 	KycResponse response=adminKycService.updateKycStatus(request);		
 	return ResponseEntity.ok(response);
 	}
 	
 	
-	@PostMapping("/ui-kyc")
-	public String updateKycFromUi(
-	        @RequestParam Long merchantId,
-	        @Valid @ModelAttribute("kycRequest") KycRequest request,
-	        BindingResult result,
-	        Model model) {
-		
-		if (result.hasErrors()) {
-	        return "registration";
-	    }
-
-        try {
-            KycResponse response =
-                    adminKycService.updateKycStatus(request);
-
-            model.addAttribute("kycResponse", response);
-
-        } catch (Exception e) {
-            model.addAttribute("kycError", e.getMessage());
-        }
-
-        return "registration";
-    }
+//	@PostMapping("/ui-kyc")
+//	public String updateKycFromUi(
+//	        @RequestParam Long merchantId,
+//	        @Valid @ModelAttribute("kycRequest") KycRequest request,
+//	        BindingResult result,
+//	        Model model) {
+//		
+//		if (result.hasErrors()) {
+//	        return "registration";
+//	    }
+//
+//        try {
+//            KycResponse response =
+//                    adminKycService.updateKycStatus(request);
+//
+//            model.addAttribute("kycResponse", response);
+//
+//        } catch (Exception e) {
+//            model.addAttribute("kycError", e.getMessage());
+//        }
+//
+//        return "registration";
+//    }
 	
 	//merchant approve status
 	@PutMapping("/{merchantId}/approve")
@@ -90,26 +93,27 @@ public class AdminKycController {
         return ResponseEntity.ok(response);
     }
 	
-	@PostMapping("/ui-approve")
-	public String approveMerchantFromUi(
-	        @Valid @ModelAttribute("merchantStatusRequest")
-	        MerchantStatusRequest request,
-	        BindingResult result,
-	        Model model) {
-
-	    if (result.hasErrors()) {
-	        return "registration";
-	    }
-
-
-        try {
-            KycApprovedResponse response =adminKycService.updateMerchantStatus(request.getMerchantId(),request.getStatus());
-            model.addAttribute("approveResponse",response);
-
-        } catch (Exception e) {
-            model.addAttribute("approveError",e.getMessage());
-        }
-
-        return "registration";
-    }
 }
+//	@PostMapping("/ui-approve")
+//	public String approveMerchantFromUi(
+//	        @Valid @ModelAttribute("merchantStatusRequest")
+//	        MerchantStatusRequest request,
+//	        BindingResult result,
+//	        Model model) {
+//
+//	    if (result.hasErrors()) {
+//	        return "registration";
+//	    }
+//
+//
+//        try {
+//            KycApprovedResponse response =adminKycService.updateMerchantStatus(request.getMerchantId(),request.getStatus());
+//            model.addAttribute("approveResponse",response);
+//
+//        } catch (Exception e) {
+//            model.addAttribute("approveError",e.getMessage());
+//        }
+//
+//        return "registration";
+//    }
+//}

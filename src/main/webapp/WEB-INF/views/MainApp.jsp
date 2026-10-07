@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -519,6 +521,60 @@
 
             </div>
 
+      <c:if test="${not empty orders}">
+
+    <div class="box">
+
+        <h2>My Orders</h2>
+
+        <table class="orders-table">
+
+            <thead>
+                <tr>
+                    <th>Order Ref</th>
+                    <th>Amount</th>
+                    <th>Currency</th>
+                    <th>Status</th>
+                    <th>Customer Email</th>
+                    <th>PG Txn Ref</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <c:forEach var="order" items="${orders}">
+
+                    <tr>
+
+                        <td>${order.order_ref}</td>
+
+                        <td>${order.amount}</td>
+
+                        <td>${order.currency}</td>
+
+                        <td>${order.status}</td>
+
+                        <td>${order.customer_email}</td>
+
+                        <td>${order.pg_txn_ref}</td>
+
+                        <td>${order.created_at}</td>
+
+                        <td>${order.updated_at}</td>
+
+                    </tr>
+
+                </c:forEach>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</c:if>
 
 
             <!-- GET SINGLE ORDER -->
@@ -694,6 +750,9 @@
 
         myOrders:
             contextPath + "/api/v1/orders",
+            
+        getOrder:
+            contextPath + "/api/v1/orders",
 
         getMerchant:
             contextPath + "/api/v1/admin/Getmerchant",
@@ -703,6 +762,15 @@
 
         webhook:
             contextPath + "/api/v1/webhook-config"
+
+    };
+    
+    /* JSP / UI URLs */
+
+    const UI = {
+
+        myOrdersPage:
+            contextPath + "/merchant/my-orders"
 
     };
 
@@ -1421,63 +1489,71 @@
      * ============================================================
      */
 
+//     document
+//         .getElementById("myOrdersButton")
+//         .addEventListener("click", async function() {
+
+
+//             const token =
+//                 getMerchantToken();
+
+
+//             if (!token) {
+
+//                 return;
+
+//             }
+
+
+//             try {
+
+//                 const data =
+//                     await callApi(
+
+//                         API.myOrders,
+
+//                         {
+
+//                             method: "GET",
+
+//                             headers: {
+
+//                                 "Authorization":
+//                                     "Bearer " + token
+
+//                             }
+
+//                         }
+
+//                     );
+
+
+//                 showResponse(
+//                     "myOrdersResponse",
+//                     data,
+//                     true
+//                 );
+
+
+//             } catch (error) {
+
+//                 showResponse(
+//                     "myOrdersResponse",
+//                     error.data || error,
+//                     false
+//                 );
+
+//             }
+
+//         });
+    
     document
-        .getElementById("myOrdersButton")
-        .addEventListener("click", async function() {
+    .getElementById("myOrdersButton")
+    .addEventListener("click", function() {
 
+        window.location.href = UI.myOrdersPage;
 
-            const token =
-                getMerchantToken();
-
-
-            if (!token) {
-
-                return;
-
-            }
-
-
-            try {
-
-                const data =
-                    await callApi(
-
-                        API.myOrders,
-
-                        {
-
-                            method: "GET",
-
-                            headers: {
-
-                                "Authorization":
-                                    "Bearer " + token
-
-                            }
-
-                        }
-
-                    );
-
-
-                showResponse(
-                    "myOrdersResponse",
-                    data,
-                    true
-                );
-
-
-            } catch (error) {
-
-                showResponse(
-                    "myOrdersResponse",
-                    error.data || error,
-                    false
-                );
-
-            }
-
-        });
+    });
 
 
 

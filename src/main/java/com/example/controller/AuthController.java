@@ -45,7 +45,8 @@ public class AuthController {
 	//API admin login
 	@PostMapping("/api/v1/auth/login")
 	@ResponseBody
-	public ResponseEntity<LoginResponse> loginMerchant(@RequestBody LoginRequest request) {
+	public ResponseEntity<LoginResponse> loginMerchant(
+			 @Valid @RequestBody LoginRequest request) {
 	
 	LoginResponse response=authService.login(request);
 	return ResponseEntity.ok(response);
@@ -54,45 +55,45 @@ public class AuthController {
 	}
 	
 	
-	//loginUI response
-	@PostMapping("/login")
-	public String loginFromUi(
-	   @Valid @ModelAttribute("loginRequest") LoginRequest request,
-	   BindingResult result,
-	   Model model,
-	   HttpSession session) {
-
-//	    LoginRequest request = new LoginRequest();
-//	    request.setUsername(username);
-//	    request.setPassword(password);
-		
-		//  Check validation errors 
-		if (result.hasErrors()) { 
-			result.getFieldErrors().forEach(error -> {
-				System.out.println( error.getField() + " = " + error.getDefaultMessage() );
-				}
-			);
-			return "registration";
-		}
-		
-		
-	    try {
-	        LoginResponse response = authService.login(request);
-
-	        model.addAttribute("loginResponse", response);
-
-	        session.setAttribute("loginResponse", response);
-	        session.setAttribute("adminUsername",request.getUsername());
-	        session.setAttribute("adminRole", response.getRole());
-	        session.setAttribute("adminMerchantId", response.getMerchantId());
-
-	    } catch (RuntimeException e) {
-
-	        model.addAttribute("loginError", e.getMessage());
-	    }
-
-	    return "registration";
-	}
+//	//loginUI response
+//	@PostMapping("/login")
+//	public String loginFromUi(
+//	   @Valid @ModelAttribute("loginRequest") LoginRequest request,
+//	   BindingResult result,
+//	   Model model,
+//	   HttpSession session) {
+//
+////	    LoginRequest request = new LoginRequest();
+////	    request.setUsername(username);
+////	    request.setPassword(password);
+//		
+//		//  Check validation errors 
+//		if (result.hasErrors()) { 
+//			result.getFieldErrors().forEach(error -> {
+//				System.out.println( error.getField() + " = " + error.getDefaultMessage() );
+//				}
+//			);
+//			return "registration";
+//		}
+//		
+//		
+//	    try {
+//	        LoginResponse response = authService.login(request);
+//
+//	        model.addAttribute("loginResponse", response);
+//
+//	        session.setAttribute("loginResponse", response);
+//	        session.setAttribute("adminUsername",request.getUsername());
+//	        session.setAttribute("adminRole", response.getRole());
+//	        session.setAttribute("adminMerchantId", response.getMerchantId());
+//
+//	    } catch (RuntimeException e) {
+//
+//	        model.addAttribute("loginError", e.getMessage());
+//	    }
+//
+//	    return "registration";
+//	}
 	
 	
 	//merchant login api
@@ -100,7 +101,7 @@ public class AuthController {
 	@PostMapping("/api/v1/merchant/auth/login")
 	@ResponseBody
 	public ResponseEntity<LoginResponse> merchantLogin(
-	        @RequestBody LoginRequest request,
+			 @Valid @RequestBody LoginRequest request,
 	        HttpSession session) {
 
 	    LoginResponse response = authService.merchantLogin(request);
@@ -112,54 +113,55 @@ public class AuthController {
 	    session.setAttribute("merchantUsername", request.getUsername());
 
 	    return ResponseEntity.ok(response);
-	}  
+	}
+}
 	
 
     // ==============================
     // MERCHANT LOGIN UI
     // ==============================
 
-    @PostMapping("/merchant/login")
-    public String merchantLoginFromUi(
-    		@Valid @ModelAttribute("merchantLoginRequest") LoginRequest request,
-    		BindingResult result,
-            Model model,
-            HttpSession session) {
-
-//        LoginRequest request = new LoginRequest();
+//    @PostMapping("/merchant/login")
+//    public String merchantLoginFromUi(
+//    		@Valid @ModelAttribute("merchantLoginRequest") LoginRequest request,
+//    		BindingResult result,
+//            Model model,
+//            HttpSession session) {
 //
-//        request.setUsername(username);
-//        request.setPassword(password);
-    	
-    	if (result.hasErrors()) {
-    		
-    		result.getFieldErrors().forEach(error -> { 
-    			System.out.println( error.getField() + " = " + error.getDefaultMessage() );
-    			}
-    		); 
-    		
-    		return "registration"; 
-    	}
-    	
-    	
-        try {
-            LoginResponse response = authService.merchantLogin(request);
-
-            model.addAttribute("merchantLoginResponse", response);
-
-            // Store merchant login in session
-            session.setAttribute("merchantLoginResponse", response);
-            session.setAttribute("merchantId", response.getMerchantId());
-            model.addAttribute("merchantLoginResponse", response);
-            session.setAttribute("merchantRole", response.getRole());
-            session.setAttribute("merchantUsername",request.getUsername());
-
-        } catch (RuntimeException e) {
-
-            model.addAttribute("merchantLoginError", e.getMessage());
-        }
-
-        return "registration";
-    
-}
-}
+////        LoginRequest request = new LoginRequest();
+////
+////        request.setUsername(username);
+////        request.setPassword(password);
+//    	
+//    	if (result.hasErrors()) {
+//    		
+//    		result.getFieldErrors().forEach(error -> { 
+//    			System.out.println( error.getField() + " = " + error.getDefaultMessage() );
+//    			}
+//    		); 
+//    		
+//    		return "registration"; 
+//    	}
+//    	
+//    	
+//        try {
+//            LoginResponse response = authService.merchantLogin(request);
+//
+//            model.addAttribute("merchantLoginResponse", response);
+//
+//            // Store merchant login in session
+//            session.setAttribute("merchantLoginResponse", response);
+//            session.setAttribute("merchantId", response.getMerchantId());
+//            model.addAttribute("merchantLoginResponse", response);
+//            session.setAttribute("merchantRole", response.getRole());
+//            session.setAttribute("merchantUsername",request.getUsername());
+//
+//        } catch (RuntimeException e) {
+//
+//            model.addAttribute("merchantLoginError", e.getMessage());
+//        }
+//
+//        return "registration";
+//    
+//}
+//}

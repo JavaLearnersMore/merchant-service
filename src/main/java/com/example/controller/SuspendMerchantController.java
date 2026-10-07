@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.dto.MerchantResponse;
 import com.example.service.SuspendMerchantService;
 
-
+@Validated
 @Controller
 @RequestMapping("/api/v1/admin/")
 public class SuspendMerchantController {
@@ -54,50 +55,51 @@ public class SuspendMerchantController {
         MerchantResponse response =suspendMerchantService.suspendMerchant(merchantId);
         return ResponseEntity.ok(response);
     }
+}
 
 
     
     // UI - GET MERCHANT
 
-    @GetMapping("/merchants/ui-get")
-    public String getMerchantFromUi(
-            @RequestParam long merchantId,
-            Model model,
-            HttpSession session) {
-
-        try {
-
-            MerchantResponse response =suspendMerchantService.getAllMerchant(merchantId);
-            model.addAttribute("merchantResponse", response);
-
-        } catch (Exception e) {
-            model.addAttribute("merchantError",e.getMessage());
-        }
-
-        return "registration";
-    }
+//    @GetMapping("/merchants/ui-get")
+//    public String getMerchantFromUi(
+//            @RequestParam long merchantId,
+//            Model model,
+//            HttpSession session) {
+//
+//        try {
+//
+//            MerchantResponse response =suspendMerchantService.getAllMerchant(merchantId);
+//            model.addAttribute("merchantResponse", response);
+//
+//        } catch (Exception e) {
+//            model.addAttribute("merchantError",e.getMessage());
+//        }
+//
+//        return "registration";
+//    }
 
 
     
     // UI - SUSPEND MERCHANT
 
-    @PostMapping("/merchants/ui-suspend")
-    public String suspendMerchantFromUi(
-            @RequestParam long merchantId,
-            Model model,
-            HttpSession session) {
-
-        try {
-
-            MerchantResponse response = suspendMerchantService.suspendMerchant(merchantId);
-
-            model.addAttribute("suspendResponse",response);
-
-        } catch (Exception e) {
-
-            model.addAttribute("suspendError",e.getMessage());
-        }
-
-        return "registration";
-    }
-}
+//    @PostMapping("/merchants/ui-suspend")
+//    public String suspendMerchantFromUi(
+//            @RequestParam long merchantId,
+//            Model model,
+//            HttpSession session) {
+//
+//        try {
+//
+//            MerchantResponse response = suspendMerchantService.suspendMerchant(merchantId);
+//
+//            model.addAttribute("suspendResponse",response);
+//
+//        } catch (Exception e) {
+//
+//            model.addAttribute("suspendError",e.getMessage());
+//        }
+//
+//        return "registration";
+//    }
+//}
