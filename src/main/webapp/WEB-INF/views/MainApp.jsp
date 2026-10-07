@@ -677,8 +677,28 @@
                                id="webhookUrl"
                                placeholder="https://example.com/webhook"
                                required>
+                               
+                        <label>Merchant ID</label>
+
+			            <input type="number"
+			                   id="webhookMerchantId"
+			                   name="merchantId"
+			                   required>
 
                     </div>
+                    
+						<div class="form-row">
+						
+						    <label>Active</label>
+						
+						    <input type="text"
+						           id="webhookActive"
+						           name="active"
+						           value="true"
+						           placeholder="true/false"
+						           required>
+						
+						</diV>
 
 
                     <button type="submit">
@@ -1823,8 +1843,7 @@
      */
 
     document
-        .getElementById("webhookForm")
-        .addEventListener("submit", async function(event) {
+        .getElementById("webhookForm").addEventListener("submit", async function(event) {
 
             event.preventDefault();
 
@@ -1842,13 +1861,16 @@
 
             const webhookData = {
 
-                url:
-                    document
-                        .getElementById("webhookUrl")
-                        .value
-                        .trim()
+            	    url:
+            	        document.getElementById("webhookUrl").value.trim(),
 
-            };
+            	    active:
+            	        document.getElementById("webhookActive").value.trim().toLowerCase() === "true",
+            	        
+            	    merchantId:
+            	    	document.getElementById("webhookMerchantId").value
+
+            	};
 
 
             try {

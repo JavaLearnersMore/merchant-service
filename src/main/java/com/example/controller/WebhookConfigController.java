@@ -3,7 +3,9 @@ package com.example.controller;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.catalina.Session;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,19 +26,16 @@ public class WebhookConfigController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateWebhookConfig(
-    		@Valid @RequestBody WebhookConfigRequest request,
-            HttpSession session) {
+    public ResponseEntity<?> updateWebhookConfig(@Valid @RequestBody WebhookConfigRequest request) {
 
     	System.out.println("Inside updateWebhookConfig");
         try {
-            Object merchantIdObject = session.getAttribute("merchantId");
-
-            if (merchantIdObject == null) {
+            
+            if (request.getMerchantId() == null) {
                 return ResponseEntity.badRequest().body("Please login as merchant first.");
             }
 
-            Long merchantId = Long.valueOf(merchantIdObject.toString());
+            Long merchantId = request.getMerchantId();
 
             WebhookConfigResponse response =webhookConfigService.saveOrUpdate(merchantId, request);
 

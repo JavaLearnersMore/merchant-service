@@ -16,6 +16,9 @@ public class WebhookConfigRequest {
 	    @NotNull(message = "Active status is required")
 	    private Boolean active;
 	    
+	    @NotNull(message = "Merchant ID is required")
+	    private Long merchantId;
+	    
 	    
     public String getUrl() {
         return url;
@@ -32,4 +35,12 @@ public class WebhookConfigRequest {
     public void setActive(Boolean active) {
         this.active = active;
     }
+
+	public Long getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
+	}
 }
