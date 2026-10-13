@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.dao.MerchantDao;
 import com.example.dto.MerchantResponse;
+import com.example.exception.ApiException;
 import com.example.model.Merchant;
 
 @Service
@@ -24,7 +25,8 @@ public class SuspendMerchantServiceImpl implements SuspendMerchantService{
 	    Merchant merchant = merchantDao.findById(merchantId);
 
 	    if (merchant == null) {
-	        throw new RuntimeException(
+	        throw new ApiException(
+	        		404,
 	                "Merchant not found with ID: " + merchantId
 	        );
 	    }
@@ -55,13 +57,15 @@ public class SuspendMerchantServiceImpl implements SuspendMerchantService{
 	    Merchant merchant = merchantDao.findById(merchantId);
 
 	    if (merchant == null) {
-	        throw new RuntimeException(
+	        throw new ApiException(
+	        		404,
 	                "Merchant not found with ID: " + merchantId
 	        );
 	    }
 
 	    if ("SUSPENDED".equalsIgnoreCase(merchant.getStatus())) {
-	        throw new RuntimeException(
+	        throw new ApiException(
+	        		409,
 	                "Merchant is already suspended"
 	        );
 	    }

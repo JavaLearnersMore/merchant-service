@@ -11,9 +11,11 @@ public interface MerchantOrderDao {
 
 	boolean existsByOrderRef(String orderRef);
 
-	List<Merchant_Order> getMerchantOrderByMerchantId(long merchant_id);
-
 	Merchant_Order getMerchantOrderRef(String orderRef);
+
+	Long getMerchantIdByUsername(String username);
+
+	List<Merchant_Order> getAllMerchantOrders();
 
 	
 	

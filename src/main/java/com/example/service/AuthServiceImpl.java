@@ -1,11 +1,15 @@
 package com.example.service;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.dao.MerchantDao;
 import com.example.dto.LoginRequest;
 import com.example.dto.LoginResponse;
+import com.example.exception.ApiException;
+import com.example.exception.InvalidCredentialsException;
+import com.example.exception.MerchantNotFoundException;
 import com.example.model.Merchant;
 import com.example.model.MerchantUser;
 import com.example.security.config.JwtService;
@@ -28,45 +32,72 @@ public class AuthServiceImpl implements AuthService{
     public LoginResponse login(LoginRequest request) {
 
      // 1. Find user
-     MerchantUser user =merchantDao.findUserByUsername(request.getUsername());
+    // MerchantUser user =merchantDao.findUserByUsername(request.getUsername());
 
+    	MerchantUser user;
+
+    	try {
+    	    user = merchantDao.findUserByUsername(request.getUsername());
+    	} catch (EmptyResultDataAccessException ex) {
+    	    throw new InvalidCredentialsException(
+    	            "Invalid username or password");
+    	}
+
+    	if (user == null) {
+    	    throw new InvalidCredentialsException(
+    	            "Invalid username or password");
+    	}
+    	
 
       // 2. Check password
       boolean passwordMatches =passwordEncoder.matches(request.getPassword(),user.getPasswordHash());
 
         if (!passwordMatches) {
-            throw new RuntimeException("Invalid username or password");
+        	throw new InvalidCredentialsException(
+                    "Invalid username or password");
         }
+        
 
 
         // 3. Check user active
         if (!user.isActive()) {
-            throw new RuntimeException("User is inactive");
+            throw new ApiException(
+            		403,
+            		"User is inactive"
+            		);
         }
 
 
         // 4. Get merchant
         Merchant merchant = merchantDao.findById(user.getMerchantId());
+        
+        if (merchant == null) {
+            throw new MerchantNotFoundException(
+                "Merchant not found with id " + user.getMerchantId()
+            );
+        }
 
 
-//        // 5. Check KYC
-//        if (!"APPROVED".equalsIgnoreCase(
-//                merchant.getKycStatus())) {
-//
-//            throw new RuntimeException(
-//                    "KYC is not approved yet"
-//            );
-//        }
-//
-//
-//        // 6. Check merchant status
-//        if (!"ACTIVE".equalsIgnoreCase(
-//                merchant.getStatus())) {
-//
-//            throw new RuntimeException(
-//                    "Merchant is not active yet"
-//            );
-//        }
+        // 5. Check KYC
+        if (!"APPROVED".equalsIgnoreCase(
+                merchant.getKycStatus())) {
+
+            throw new ApiException(
+            		403,            		
+                    "KYC is not approved yet"
+            );
+        }
+
+
+        // 6. Check merchant status
+        if (!"ACTIVE".equalsIgnoreCase(
+                merchant.getStatus())) {
+
+            throw new ApiException(
+            		401,
+                    "Merchant is not active yet"
+            );
+        }
 
 
         // 7. JWT for accesstoken
@@ -98,23 +129,48 @@ public class AuthServiceImpl implements AuthService{
     public LoginResponse merchantLogin(LoginRequest request) {
 
         // 1. Find merchant user
-        MerchantUser user = merchantDao.findUserByUsername(request.getUsername());
+        //MerchantUser user = merchantDao.findUserByUsername(request.getUsername());
+        
+    	MerchantUser user;
 
+    	try {
+    	    user = merchantDao.findUserByUsername(request.getUsername());
+    	} catch (EmptyResultDataAccessException ex) {
+    	    throw new InvalidCredentialsException(
+    	            "Invalid username or password");
+    	}
+
+    	if (user == null) {
+    	    throw new InvalidCredentialsException(
+    	            "Invalid username or password");
+    	}
+    	
+    	
         // 2. Check password
         boolean passwordMatches =passwordEncoder.matches(
         		request.getPassword(),user.getPasswordHash());
 
         if (!passwordMatches) {
-            throw new RuntimeException("Invalid username or password");
+        	throw new InvalidCredentialsException(
+        			
+                    "Invalid username or password");
         }
 
         // 3. Check merchant user active
         if (!user.isActive()) {
-            throw new RuntimeException("Merchant user is inactive");
+            throw new ApiException(
+            		401,
+            		"Merchant user is inactive");
         }
 
         // 4. Get merchant
         Merchant merchant =merchantDao.findById(user.getMerchantId());
+        
+        if (merchant == null) {
+            throw new MerchantNotFoundException(
+                "Merchant not found with id " + user.getMerchantId()
+            );
+        }
         
         // We are explicitly passing MERCHANT as role.
         String accessToken =jwtService.generateToken(user.getMerchantId(), user.getUsername(),"MERCHANT");

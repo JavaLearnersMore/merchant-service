@@ -4,19 +4,25 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
+
+import com.example.dao.MerchantDao;
 import com.example.dao.MerchantOrderDao;
 import com.example.dto.OrderRequest;
 import com.example.dto.OrderResponse;
+import com.example.exception.ApiException;
+import com.example.model.MerchantUser;
 import com.example.model.Merchant_Order;
 
 @Service
 public class MerchantOderServiceImpl implements MerchantOderService{
 	
 	private MerchantOrderDao merchantOrderDao;
+	private MerchantDao merchantDao;
 	
 	
-	public MerchantOderServiceImpl(MerchantOrderDao merchantOrderDao) {
+	public MerchantOderServiceImpl(MerchantOrderDao merchantOrderDao,MerchantDao merchantDao) {
 		this.merchantOrderDao=merchantOrderDao;
+		this.merchantDao=merchantDao;
 		
 	}
 
@@ -27,7 +33,8 @@ public class MerchantOderServiceImpl implements MerchantOderService{
 		if (merchantOrderDao.existsByOrderRef(
                 request.getOrderRef())) {
 
-            throw new RuntimeException(
+            throw new ApiException(
+            		409,
                     "Order reference already exists: "
                             + request.getOrderRef()
             );
@@ -83,12 +90,9 @@ public class MerchantOderServiceImpl implements MerchantOderService{
 	
 	
 	@Override
-    public List<Merchant_Order> getMyOrders(
-            long merchant_id) {
-
-        return merchantOrderDao
-                .getMerchantOrderByMerchantId(merchant_id);
-    }
+	public List<Merchant_Order> getAllOrders() {
+	    return merchantOrderDao.getAllMerchantOrders();
+	}
 	
 	
     @Override
@@ -98,7 +102,10 @@ public class MerchantOderServiceImpl implements MerchantOderService{
 
         // Order not found
         if (order == null) {
-            return null;
+            throw new ApiException(
+            		404,
+            		"Order not found"
+            		);
         }
 
         // Order found
@@ -120,6 +127,15 @@ public class MerchantOderServiceImpl implements MerchantOderService{
         response.setUpdatedAt(order.getUpdated_at());
 
         return response;
+    }
+    
+    
+    @Override
+    public Long getMerchantIdByUsername(String username) {
+
+        MerchantUser user = merchantDao.findUserByUsername(username);
+
+        return user.getMerchantId();
     }
 
 	

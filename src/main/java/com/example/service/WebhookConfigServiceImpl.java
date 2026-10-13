@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.dao.WebhookConfigDao;
 import com.example.dto.WebhookConfigRequest;
 import com.example.dto.WebhookConfigResponse;
+import com.example.exception.ApiException;
 import com.example.model.WebhookConfig;
 
 @Service
@@ -25,7 +26,9 @@ public class WebhookConfigServiceImpl implements WebhookConfigService {
 
         // 1. Validate merchant ID
         if (merchantId == null) {
-            throw new RuntimeException("Merchant ID is required");
+            throw new ApiException(
+            		400,
+            		"Merchant ID is required");
         }
 
         // 2. Validate request

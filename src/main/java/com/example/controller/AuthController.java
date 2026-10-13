@@ -105,6 +105,11 @@ public class AuthController {
 	        HttpSession session) {
 
 	    LoginResponse response = authService.merchantLogin(request);
+	    
+	    System.out.println("Merchant login successful");
+	    System.out.println("Merchant ID = " + response.getMerchantId());
+	    System.out.println("Merchant Role = " + response.getRole());
+	    System.out.println("Session ID = " + session.getId());
 
 	    // Store merchant details in session
 	    session.setAttribute("merchantLoginResponse", response);
@@ -112,6 +117,8 @@ public class AuthController {
 	    session.setAttribute("merchantRole", response.getRole());
 	    session.setAttribute("merchantUsername", request.getUsername());
 
+	    System.out.println("Session merchantId = "+ session.getAttribute("merchantId"));
+	    
 	    return ResponseEntity.ok(response);
 	}
 }

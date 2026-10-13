@@ -2,10 +2,12 @@ package com.example.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,14 +34,26 @@ public class MerchantOrderRestController {
 	
 	@PostMapping("/orders")
 	public ResponseEntity<OrderResponse> createMerchantOrder(
-		 @Valid @RequestBody OrderRequest request){
-		
-		long merchant_id = 1001L;
-		
-		OrderResponse response=merchantOrderService.createOrders(request,merchant_id);
-		
-		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	        @Valid @RequestBody OrderRequest request,
+	        HttpSession session) {
+
+	    Long merchantId = (Long) session.getAttribute("merchantId");
+
+	    if (merchantId == null) {
+	        throw new RuntimeException("Merchant not logged in");
+	    }
+
+	    System.out.println("Merchant ID from session = " + merchantId);
+
+	    OrderResponse response =
+	            merchantOrderService.createOrders(request, merchantId);
+
+	    return ResponseEntity
+	            .status(HttpStatus.CREATED)
+	            .body(response);
 	}
+	
+	
 	
 	//get single order
 	@GetMapping("/orders/{order_ref}")

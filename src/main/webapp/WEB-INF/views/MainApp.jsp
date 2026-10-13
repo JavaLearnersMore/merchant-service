@@ -521,60 +521,60 @@
 
             </div>
 
-      <c:if test="${not empty orders}">
+<%--       <c:if test="${not empty orders}"> --%>
 
-    <div class="box">
+<!--     <div class="box"> -->
 
-        <h2>My Orders</h2>
+<!--         <h2>My Orders</h2> -->
 
-        <table class="orders-table">
+<!--         <table class="orders-table"> -->
 
-            <thead>
-                <tr>
-                    <th>Order Ref</th>
-                    <th>Amount</th>
-                    <th>Currency</th>
-                    <th>Status</th>
-                    <th>Customer Email</th>
-                    <th>PG Txn Ref</th>
-                    <th>Created At</th>
-                    <th>Updated At</th>
-                </tr>
-            </thead>
+<!--             <thead> -->
+<!--                 <tr> -->
+<!--                     <th>Order Ref</th> -->
+<!--                     <th>Amount</th> -->
+<!--                     <th>Currency</th> -->
+<!--                     <th>Status</th> -->
+<!--                     <th>Customer Email</th> -->
+<!--                     <th>PG Txn Ref</th> -->
+<!--                     <th>Created At</th> -->
+<!--                     <th>Updated At</th> -->
+<!--                 </tr> -->
+<!--             </thead> -->
 
-            <tbody>
+<!--             <tbody> -->
 
-                <c:forEach var="order" items="${orders}">
+<%--                 <c:forEach var="order" items="${orders}"> --%>
 
-                    <tr>
+<!--                     <tr> -->
 
-                        <td>${order.order_ref}</td>
+<%--                         <td>${order.order_ref}</td> --%>
 
-                        <td>${order.amount}</td>
+<%--                         <td>${order.amount}</td> --%>
 
-                        <td>${order.currency}</td>
+<%--                         <td>${order.currency}</td> --%>
 
-                        <td>${order.status}</td>
+<%--                         <td>${order.status}</td> --%>
 
-                        <td>${order.customer_email}</td>
+<%--                         <td>${order.customer_email}</td> --%>
 
-                        <td>${order.pg_txn_ref}</td>
+<%--                         <td>${order.pg_txn_ref}</td> --%>
 
-                        <td>${order.created_at}</td>
+<%--                         <td>${order.created_at}</td> --%>
 
-                        <td>${order.updated_at}</td>
+<%--                         <td>${order.updated_at}</td> --%>
 
-                    </tr>
+<!--                     </tr> -->
 
-                </c:forEach>
+<%--                 </c:forEach> --%>
 
-            </tbody>
+<!--             </tbody> -->
 
-        </table>
+<!--         </table> -->
 
-    </div>
+<!--     </div> -->
 
-</c:if>
+<%-- </c:if> --%>
 
 
             <!-- GET SINGLE ORDER -->
@@ -760,7 +760,7 @@
             contextPath + "/api/v1/auth/login",
 
         merchantLogin:
-            contextPath + "/api/v1/auth/login",
+            contextPath + "/api/v1/merchant/auth/login",
 
         updateKyc:
             contextPath + "/api/v1/admin/merchants/kyc",
@@ -768,8 +768,11 @@
         createOrder:
             contextPath + "/api/v1/orders",
 
-        myOrders:
-            contextPath + "/api/v1/orders",
+//         myOrders:
+//             contextPath + "/merchant/my-orders",
+
+        myOrdersPage:
+               contextPath + "/merchant/my-orders",
             
         getOrder:
             contextPath + "/api/v1/orders",
@@ -782,15 +785,6 @@
 
         webhook:
             contextPath + "/api/v1/webhook-config"
-
-    };
-    
-    /* JSP / UI URLs */
-
-    const UI = {
-
-        myOrdersPage:
-            contextPath + "/merchant/my-orders"
 
     };
 
@@ -1253,7 +1247,7 @@
 
 
             if (!token) {
-
+            	alert("Please first login as platform admin.");
                 return;
 
             }
@@ -1347,7 +1341,10 @@
          const token = getAdminToken();
 
          if (!token) {
-             return;
+        	 
+        	 alert("Please first login as platform admin.");
+             
+        	 return;
          }
 
          const merchantId =
@@ -1410,12 +1407,11 @@
             event.preventDefault();
 
 
-            const token =
-                getMerchantToken();
+            const token = getMerchantToken();
 
 
             if (!token) {
-
+            	alert("Please first login as merchant.");
                 return;
 
             }
@@ -1509,72 +1505,70 @@
      * ============================================================
      */
 
-//     document
-//         .getElementById("myOrdersButton")
-//         .addEventListener("click", async function() {
+    document.getElementById("myOrdersButton").addEventListener("click", async function() {
 
 
-//             const token =
-//                 getMerchantToken();
+            const token =
+                getMerchantToken();
 
 
-//             if (!token) {
+            if (!token) {
+            	alert("Please first login as merchant.");
+                return;
 
-//                 return;
-
-//             }
-
-
-//             try {
-
-//                 const data =
-//                     await callApi(
-
-//                         API.myOrders,
-
-//                         {
-
-//                             method: "GET",
-
-//                             headers: {
-
-//                                 "Authorization":
-//                                     "Bearer " + token
-
-//                             }
-
-//                         }
-
-//                     );
+            }
 
 
-//                 showResponse(
-//                     "myOrdersResponse",
-//                     data,
-//                     true
-//                 );
+            try {
+
+                const data =
+                    await callApi(
+
+                        API.myOrdersPage,
+
+                        {
+
+                            method: "GET",
+
+                            headers: {
+
+                                "Authorization":
+                                    "Bearer " + token
+
+                            }
+
+                        }
+
+                    );
 
 
-//             } catch (error) {
+                showResponse(
+                    "myOrdersResponse",
+                    data,
+                    true
+                );
 
-//                 showResponse(
-//                     "myOrdersResponse",
-//                     error.data || error,
-//                     false
-//                 );
 
-//             }
+            } catch (error) {
 
-//         });
+                showResponse(
+                    "myOrdersResponse",
+                    error.data || error,
+                    false
+                );
+
+            }
+
+        });
     
-    document
-    .getElementById("myOrdersButton")
-    .addEventListener("click", function() {
+//     document
+//     .getElementById("myOrdersButton")
+//     .addEventListener("click", function() {
+    	
 
-        window.location.href = UI.myOrdersPage;
+//         window.location.href = UI.myOrdersPage;
 
-    });
-
+//     });
 
 
     /*

@@ -51,66 +51,41 @@ public class MerchantOrderDaoImpl implements MerchantOrderDao{
     }
 	
 	
-	 @Override
-	    public List<Merchant_Order> getMerchantOrderByMerchantId(long merchant_id) {
+	@Override
+	public List<Merchant_Order> getAllMerchantOrders() {
 
-	        String sql =
-	                "SELECT order_ref, merchant_id, amount, currency, " +
-	                "status, customer_email, pg_txn_ref, " +
-	                "created_at, updated_at " +
-	                "FROM merchant_order " +
-	                "WHERE merchant_id = ? " +
-	                "ORDER BY created_at DESC";
+	    String sql =
+	            "SELECT order_ref, merchant_id, amount, currency, " +
+	            "status, customer_email, pg_txn_ref, " +
+	            "created_at, updated_at " +
+	            "FROM merchant_order " +
+	            "ORDER BY created_at DESC";
 
-	        return jdbcTemplate.query(
-	                sql,
-	                (rs, rowNum) -> {
+	    return jdbcTemplate.query(sql, (rs, rowNum) -> {
 
-	                    Merchant_Order order =
-	                            new Merchant_Order();
+	        Merchant_Order order = new Merchant_Order();
 
-	                    order.setOrder_ref(
-	                            rs.getString("order_ref"));
+	        order.setOrder_ref(rs.getString("order_ref"));
+	        order.setMerchant_id(rs.getLong("merchant_id"));
+	        order.setAmount(rs.getDouble("amount"));
+	        order.setCurrency(rs.getString("currency"));
+	        order.setStatus(rs.getString("status"));
+	        order.setCustomer_email(rs.getString("customer_email"));
+	        order.setPg_txn_ref(rs.getString("pg_txn_ref"));
 
-	                    order.setMerchant_id(
-	                            rs.getLong("merchant_id"));
+	        if (rs.getTimestamp("created_at") != null) {
+	            order.setCreated_at(
+	                    rs.getTimestamp("created_at").toLocalDateTime());
+	        }
 
-	                    order.setAmount(
-	                            rs.getDouble("amount"));
+	        if (rs.getTimestamp("updated_at") != null) {
+	            order.setUpdated_at(
+	                    rs.getTimestamp("updated_at").toLocalDateTime());
+	        }
 
-	                    order.setCurrency(
-	                            rs.getString("currency"));
-
-	                    order.setStatus(
-	                            rs.getString("status"));
-
-	                    order.setCustomer_email(
-	                            rs.getString("customer_email"));
-
-	                    order.setPg_txn_ref(
-	                            rs.getString("pg_txn_ref"));
-
-	                    if (rs.getTimestamp("created_at")
-	                            != null) {
-
-	                        order.setCreated_at(
-	                                rs.getTimestamp("created_at")
-	                                        .toLocalDateTime());
-	                    }
-
-	                    if (rs.getTimestamp("updated_at")
-	                            != null) {
-
-	                        order.setUpdated_at(
-	                                rs.getTimestamp("updated_at")
-	                                        .toLocalDateTime());
-	                    }
-
-	                    return order;
-	                },
-	                merchant_id
-	        );
-	    }
+	        return order;
+	    });
+	}
 	    
 	    @Override
 	    public Merchant_Order getMerchantOrderRef(String orderRef) {
@@ -159,6 +134,20 @@ public class MerchantOrderDaoImpl implements MerchantOrderDao{
 	        }
 
 	        return orders.get(0);
+	    }
+	    
+	    
+	    @Override
+	    public Long getMerchantIdByUsername(String username) {
+
+	        String sql =
+	                "SELECT merchant_id FROM merchants WHERE admin_username = ?";
+
+	        return jdbcTemplate.queryForObject(
+	                sql,
+	                Long.class,
+	                username
+	        );
 	    }
 	}
 	

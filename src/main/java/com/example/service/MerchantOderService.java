@@ -12,9 +12,11 @@ public interface MerchantOderService {
 
 	OrderResponse createOrders(OrderRequest request, long merchant_id);
 
-	List<Merchant_Order> getMyOrders(long merchant_id);
+	List<Merchant_Order> getAllOrders();
 
 	OrderResponse getMyOrderByRef(String order_ref);
+
+	Long getMerchantIdByUsername(String username);
 
 	
 

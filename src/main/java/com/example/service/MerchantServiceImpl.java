@@ -1,5 +1,6 @@
 package com.example.service;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.dao.MerchantDao;
 import com.example.dto.MerchantRegisterRequest;
 import com.example.dto.MerchantResponse;
+import com.example.exception.ApiException;
 import com.example.model.Merchant;
 import com.example.model.MerchantUser;
 
@@ -27,6 +29,8 @@ public class MerchantServiceImpl implements MerchantService {
 
         // 1. Create Merchant
 
+    	try {
+    	
         Merchant merchant = new Merchant();
         merchant.setLegalName(request.getLegalName());
         merchant.setEmail(request.getEmail());
@@ -56,13 +60,29 @@ public class MerchantServiceImpl implements MerchantService {
 
         // 4. Save ADMIN user
         merchantDao.saveMerchantUser(user);
+        
 
         // 5. Get saved merchant
         Merchant savedMerchant =merchantDao.findById(merchantId);
+        if (savedMerchant == null) {
+            throw new ApiException(
+                    404,
+                    "Registered merchant not found"
+            );
+        }
 
         // 6. Convert to response
         return convertToResponse(savedMerchant);
+
+    } catch (DuplicateKeyException e) {
+
+        throw new ApiException(
+                409,
+                "Email or username already exists"
+        );
     }
+}
+
 
     private MerchantResponse convertToResponse(Merchant merchant) {
 

@@ -6,6 +6,7 @@ import com.example.dao.MerchantDao;
 import com.example.dto.KycApprovedResponse;
 import com.example.dto.KycRequest;
 import com.example.dto.KycResponse;
+import com.example.exception.ApiException;
 import com.example.model.Merchant;
 
 @Service
@@ -22,8 +23,11 @@ public class AdminKycServiceImpl implements AdminKycService{
         Merchant merchant = merchantDao.findById(request.getMerchantId());
         
         if (merchant == null) {
-            throw new IllegalArgumentException(
-                    "Merchant not found with ID: " + request.getMerchantId());
+            throw new ApiException(
+                    404,
+                    "Merchant not found with ID: "
+                            + request.getMerchantId()
+            );
         }
 
         // 2. KYC status update
@@ -56,11 +60,20 @@ public class AdminKycServiceImpl implements AdminKycService{
 
 
         // 2. Check KYC status
+        if (merchant == null) {
+            throw new ApiException(
+                    404,
+                    "Merchant not found with ID: " + merchantId
+            );
+        }
+
+        // 2. Check KYC status
         if (!"APPROVED".equalsIgnoreCase(
                 merchant.getKycStatus())) {
 
-            throw new IllegalStateException(
-                "Merchant KYC is not APPROVED"
+            throw new ApiException(
+                    400,
+                    "Merchant KYC is not APPROVED"
             );
         }
 
@@ -71,6 +84,13 @@ public class AdminKycServiceImpl implements AdminKycService{
 
         // 4. Get updated merchant
         Merchant updatedMerchant =merchantDao.findById(merchantId);
+        
+        if (updatedMerchant == null) {
+            throw new ApiException(
+                    404,
+                    "Merchant not found after approval"
+            );
+        }
 
         // 5. Create response
         KycApprovedResponse response =new KycApprovedResponse();
@@ -98,15 +118,19 @@ public class AdminKycServiceImpl implements AdminKycService{
         Merchant merchant =merchantDao.findById(merchantId);
         
         if (merchant == null) {
-            throw new IllegalArgumentException(
-                    "Merchant not found with ID: " + merchantId);
+            throw new ApiException(
+                    404,
+                    "Merchant not found with ID: " + merchantId
+            );
         }
+
 
         // 2. Status validation
         if (!"ACTIVE".equalsIgnoreCase(status)
                 && !"INACTIVE".equalsIgnoreCase(status)) {
 
-            throw new IllegalArgumentException(
+            throw new ApiException(
+            		403,
                 "Status must be ACTIVE or INACTIVE"
             );
         }
@@ -116,6 +140,14 @@ public class AdminKycServiceImpl implements AdminKycService{
 
         // 4. Get updated merchant
         Merchant updatedMerchant =merchantDao.findById(merchantId);
+        
+        if(updatedMerchant == null) {
+        	throw new ApiException(
+        			
+        			404,
+        			"Merchant not found after status update"
+        			);
+        }
 
         // 5. Create response
         KycApprovedResponse response =new KycApprovedResponse();
